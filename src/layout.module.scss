@@ -13,3 +13,35 @@
   box-sizing: border-box;
 }
 
+.container{
+  width: 100%;
+  height: 100vh;
+  background: var(--primary-color);
+  display: flex; 
+  flex-direction: column-reverse;
+
+  font-family: "Roboto", sans-serif;
+  @media (min-width: 880px) {
+    display: grid;
+    grid-template-columns: max(255px) 3fr;
+  }
+}
+
+.sidebarContainer{
+  height: 79px;
+  background-color: red;
+  @media (min-width: 880px) {
+    height: 100vh;
+
+  }
+}
+
+.contentContainer{
+  flex: 1;
+  height: 90%;
+
+  @media (min-width: 880px) {
+    height: 100%;
+    flex: 0;
+  }
+}

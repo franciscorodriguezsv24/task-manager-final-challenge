@@ -5,10 +5,10 @@ import styles from "./layout.module.scss";
 export const Layout = () => {
   return (
     <div className={styles.container}>
-      <div>
+      <div className={styles.sidebarContainer}>
         <Sidebar />
       </div>
-      <div>
+      <div className={styles.contentContainer}>
         <Outlet />
       </div>
     </div>
