@@ -1,0 +1,29 @@
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+
+$primary-red: #DA584B;
+$secondary-red: #DA584B1A;
+$primary-green:  #70B252;
+$Secondary-green: #70B2521A;
+$Primary-yellow: #E5B454;
+$Secondary-yellow: #E5B4541A;
+$Primary-white: #ffffff;
+$Secondary-white: #94979A1A;
+$Primary-gray: #94979A;
+$primary-pink: #E27D73;
+$gradient-linear: linear-gradient(90deg, rgba(186, 37, 37, 0) 0%, rgba(210, 77, 77, 0.1) 100%);
+$title: 18px;
+$text: 15px;
+
+:root {
+    --primary-color: #222528;
+    --secondary-color: #2C2F33;
+    --primary-text: #ffffff;
+
+}
+
+[data-theme="dark"] {
+    --primary-background: #f5f6fc;
+    --primary-card: #ffffff;
+    --primary-text: #000000;
+}
