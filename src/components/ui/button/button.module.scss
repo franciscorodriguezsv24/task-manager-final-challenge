@@ -1,0 +1,25 @@
+@use '../../../styles/global' as *;
+
+.button{
+    max-width: 9.6rem;
+    height: 32px;
+    border-radius: 4px;
+    border: none;
+    padding: 0px 10px 0px 10px;
+}
+
+.default{
+    background: var(--primary-color);
+    color: $primary-white;
+}
+
+.primary{
+    background: var(--primary-color);
+    border: 1px solid $primary-red;
+    color: $primary-red;
+}
+
+.secondary{
+    background: $primary-red;
+    color: $primary-white;
+}
