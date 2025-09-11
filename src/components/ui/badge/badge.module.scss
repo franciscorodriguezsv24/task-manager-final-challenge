@@ -11,6 +11,12 @@
 .default{
     background: $secondary-white;
     color: $primary-white;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap:0.5rem;
+    text-transform: uppercase;
+    font-weight: 600;
 }
 
 .primary{
