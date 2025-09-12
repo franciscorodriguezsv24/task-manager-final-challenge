@@ -1,0 +1,14 @@
+@use "../../../styles/global" as *;
+
+.text{
+    font-weight: 400;
+    color: var(--primary-text);
+}
+
+.title{
+    font-size: 18px;
+}
+
+.subtitle{
+    font-size: 15px;
+}

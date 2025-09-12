@@ -1,0 +1,89 @@
+@use '../../../styles/global' as *;
+
+.inputSearchContainer {
+    width: 70%;
+    position: relative;
+    margin:10px;
+
+    @media (min-width: 880px) {
+        width: 100%;
+        margin: 0px;
+        height: 100%;
+    }
+}
+
+.homeInput {
+    padding-left: 4.5rem;
+    width: 100%;
+    height: 68px;
+    position: relative;
+    border-radius: 16px;
+    border: none;
+    background: var(--secondary-color);
+    color: $primary-gray;
+    font-size: 15px;
+    font-weight: 400;
+    padding-right: 5px;
+
+
+    @media (min-width:880px) {
+        padding-left: 3rem;
+        padding-right: 7rem;
+    }
+}
+
+.homeInput::placeholder {
+    color: $primary-gray;
+    opacity: 1;
+    font-size: 15px;
+    font-weight: 400;
+}
+
+.iconSearch {
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    top: 50%;
+    left: 25px;
+    transform: translateY(-50%);
+    color: $primary-gray;
+    pointer-events: none; 
+    z-index: 1000;
+
+    @media (min-width: 880px) {
+        left: 15px;
+        width: 20px;
+        height: 20px;
+    }
+}
+
+.avatarContainer{
+    position: absolute;
+    top: 50%;
+    right: -100px;
+
+    color: $primary-gray;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+
+    @media(min-width: 880px){
+    right: 25px;
+
+    }
+
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+  white-space: nowrap;
+}

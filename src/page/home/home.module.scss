@@ -1,0 +1,44 @@
+.dashboardContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    height: 100%;
+}
+
+.buttonContainer{
+    display: flex;
+    justify-content: space-between;
+    height: auto;
+    padding: 0px 16px 0px 16px;
+
+    @media (min-width: 880px) {
+    padding: 0px;
+        
+    }
+}
+
+.layoutButtonContainer{
+    display: flex;
+    gap: 1rem;
+}
+
+.buttons{
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tasksArea {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    overflow-x: scroll;
+    padding-left:16px;
+    margin-right: 16px;
+    @media (min-width: 880px) {
+        padding-left:0px;
+        margin-right: 0px;
+    }
+}
