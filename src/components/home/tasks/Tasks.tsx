@@ -7,7 +7,7 @@ export const Tasks = () => {
     <div className={styles.tasksContainer}>
       <div className={styles.taskColumns}>
         <div className={styles.headerTask}>
-          <Text>Working</Text>
+          <Text variant="title">Working</Text>
         </div>
         <div className={styles.tasks}>
           <Cards />
@@ -19,14 +19,18 @@ export const Tasks = () => {
       </div>
 
       <div className={styles.taskColumns}>
-        <Text>Progress</Text>
+        <div className={styles.headerTask}>
+          <Text variant="title">Progress</Text>
+        </div>
         <div className={styles.tasks}>
           <Cards />
         </div>
       </div>
 
       <div className={styles.taskColumns}>
-        <Text>Done</Text>
+        <div className={styles.headerTask}>
+          <Text variant="title">Progress</Text>
+        </div>
         <div className={styles.tasks}>
           <Cards />
         </div>

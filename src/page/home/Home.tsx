@@ -1,7 +1,8 @@
-import { RiAddFill, RiGalleryView2, RiMenuLine } from "@remixicon/react";
+import { RiGalleryView2, RiMenuLine } from "@remixicon/react";
 import { Button } from "../../components/ui/button/Button";
 import styles from "./home.module.scss";
 import { Tasks } from "../../components/home/tasks/Tasks";
+import { CreateTask } from "../../components/home/createTask/CreateTask";
 
 export const Home = () => {
   return (
@@ -15,9 +16,7 @@ export const Home = () => {
             <RiGalleryView2 />
           </Button>
         </div>
-        <Button variant="secondary" className={styles.buttons}>
-          <RiAddFill />
-        </Button>
+        <CreateTask />
       </div>
       <div className={styles.tasksArea}>
         <Tasks />
