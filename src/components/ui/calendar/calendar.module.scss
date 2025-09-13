@@ -1,0 +1,154 @@
+@use '../../../styles/global' as *;
+
+.DatePickerElement{
+    color: var(--primary-text);
+    font-family: 'Roboto', sans-serif;
+}
+
+.datePickerInput{
+    display: flex;
+    width: 8.0625rem;
+    height: 2rem;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--sencondary-color);
+    border: none;
+    color: var(--priamry-text);
+}
+
+.datePickerInput:hover{
+    background-color: $secondary-white;
+}
+
+.containerCalendar{
+    background-color: var(--primary-color);
+}
+
+.headerCalendar{
+    color: #ffffff;
+    font-family: 'Roboto', sans-serif;
+}
+
+.weekDays{
+    color: #ffff;
+    font-family: 'Roboto', sans-serif;
+    padding-top: 0.5rem;
+}
+
+.actionCalendar{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    width: 100%;
+    gap: 1rem;
+    border-bottom: 1px solid $primary-gray;
+    height: 2.5rem;
+
+}
+
+.actionCalendar Button{
+    background-color: var(--primary-color);
+    border: none;
+    color: var(--primary-text);
+}
+
+.calendarContainer{
+    width: 100%;
+    height: 15rem;
+    border-bottom: 1px solid $primary-gray;
+}
+
+.calendarCell{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    margin: 1px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    border: none;
+    background: none;
+    color: #ffffff;
+    transition: all 0.15s ease;
+    font-family: 'Roboto', sans-serif;
+  
+  /* Día normal */
+  &:hover {
+    background-color: $primary-red;
+  }
+  
+  /* Día seleccionado */
+  &[data-selected] {
+    background-color: $primary-red;
+    color: var(--primary-text);
+    font-weight: 600;
+    
+    &:hover {
+      background-color: var(--primary-color);
+    }
+  }
+  
+  /* Día de hoy */
+  &[data-today] {
+    color: $primary-red;
+    font-weight: 600;
+    border: 1px solid $primary-red;
+    
+    &:hover {
+      background-color: #fde68a;
+    }
+  }
+  
+  /* Día de hoy seleccionado */
+  &[data-selected][data-today] {
+    background-color: $primary-red;
+    color: white;
+  }
+  
+  /* Días fuera del mes actual */
+  &[data-outside-month] {
+    color: #94979A;
+    
+    &:hover {
+      background-color: $primary-red;
+      color: #9ca3af;
+    }
+  }
+  
+  /* Días deshabilitados */
+  &[data-disabled] {
+    color: #d1d5db;
+    cursor: not-allowed;
+    
+    &:hover {
+      background-color: transparent;
+    }
+  }
+  
+  /* Focus */
+  &:focus {
+    outline-offset: 2px;
+  }
+  
+  /* Día presionado */
+  &[data-pressed] {
+    transform: scale(0.95);
+  }
+}
+
+.todayButton{
+    width: 100%;
+    height: 2rem;
+    background-color: var(--primary-color);
+    border: none;
+    border: 0px 1px 1px 1px solid $primary-gray;
+    color: $primary-red
+}
+
+.dialogContainer{
+border: 1px solid $primary-gray;
+}
