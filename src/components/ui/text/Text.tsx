@@ -2,13 +2,19 @@ import type { ReactNode } from "react";
 import styles from "./text.module.scss";
 
 interface TextProps {
-  variant?: string;
+  variant: string;
   children: ReactNode;
+  className?: string;
 }
 
-export const Text = ({ variant = "text", children, ...props }: TextProps) => {
+export const Text = ({
+  variant = "subtile",
+  className,
+  children,
+  ...props
+}: TextProps) => {
   return (
-    <p className={`${styles.text} ${styles[variant]}`} {...props}>
+    <p className={`${className} ${styles[variant]}`} {...props}>
       {children}
     </p>
   );
