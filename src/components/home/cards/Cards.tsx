@@ -11,17 +11,15 @@ import { Text } from "../../ui/text/Text";
 import styles from "./card.module.scss";
 import { DropdownEdit } from "../dropdownEdit/DropdownEdit";
 import type { GetTasksQuery } from "../../../generated/graphql";
+import { pointEstimate } from "../../../hooks/PointEstimate";
+import { tagToValue } from "../../../hooks/TagValue";
 
-function numberName(nombre: string): number | null {
-  const mapa: Record<string, number> = {
-    zero: 0,
-    one: 1,
-    two: 2,
-    four: 4,
-    eight: 8,
-  };
+function numberName(point: string): string | null {
+  return pointEstimate[point] ?? null;
+}
 
-  return mapa[nombre.toLowerCase()] ?? null;
+function labelTag(label: string): string | null {
+  return tagToValue[label] ?? null;
 }
 
 type Tasks = GetTasksQuery["tasks"];
@@ -35,11 +33,11 @@ export const Cards = ({ task }: { task: Task }) => {
     <Card.Container className={styles.cardContainer}>
       <Card.Header className={styles.cardHeader}>
         <Text variant="title">{task.name}</Text>
-        <DropdownEdit />
+        <DropdownEdit task={{ id: task.id }} />
       </Card.Header>
       <Card.Body className={styles.cardBody}>
         <div className={styles.pointsContainer}>
-          <Text variant="title">{numberName(task.pointEstimate)} poiint</Text>
+          <Text variant="title">{numberName(task.pointEstimate)}</Text>
           <Badge variant="default">
             <RiAlarmLine /> Today
           </Badge>
@@ -48,7 +46,7 @@ export const Cards = ({ task }: { task: Task }) => {
           {task.tags.map((tag) => {
             return (
               <Badge variant={tag.toLowerCase()} key={tag}>
-                {tag}
+                {labelTag(tag)}
               </Badge>
             );
           })}
