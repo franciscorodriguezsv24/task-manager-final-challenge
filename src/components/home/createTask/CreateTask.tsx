@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Modal } from "../../ui/modal/Modal";
-import { RiAddFill } from "@remixicon/react";
+import { RiAddCircleFill, RiAddFill, RiCloseLargeLine } from "@remixicon/react";
 import { Button } from "../../ui/button/Button";
 import styles from "./createTask.module.scss";
 import { createPortal } from "react-dom";
@@ -8,79 +8,283 @@ import { ListBox } from "../../ui/listBox/ListBox";
 import { ListAvatar } from "../../ui/listAvatar/ListAvatar";
 import { ListCheckBox } from "../../ui/listChexkbox/ListCheckBox";
 import { CalendarC } from "../../ui/calendar/Calendar";
+import { z } from "zod";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@apollo/client";
+import { CREATE_TASK } from "../../graphql/queries.graphql";
+import {
+  useGetLabelsQuery,
+  useGetPointEstimatesQuery,
+  useGetUsersQuery,
+} from "../../../generated/graphql";
+import { tagToValue } from "../../../hooks/TagValue";
+import { pointEstimate } from "../../../hooks/PointEstimate";
+import { useMediaQuery } from "../../../hooks/UseMediaQuery";
+
+const formSchema = z.object({
+  taskName: z.string().min(3, "Add a validate task's name"),
+  pointsTask: z.string().min(1, "this field is required"),
+  assignee: z.string().min(1, "this field is required"),
+  label: z.array(z.string()).min(1, "This field is required"),
+  dueDate: z.date().min(1, "this field is required"),
+});
+
+type FormData = z.infer<typeof formSchema>;
 
 export const CreateTask = () => {
+  const isMobile = useMediaQuery("(max-width: 880px)");
+
   const [isShowModal, setIsShowModal] = useState<boolean>(false);
 
-  const points = [
-    { id: 1, value: "0 points" },
-    { id: 2, value: "1 points" },
-    { id: 3, value: "2 points" },
-    { id: 4, value: "3 points" },
-    { id: 5, value: "4 points" },
-  ];
+  const {
+    loading: isLoadingUsers,
+    data: dataUsers,
+    error: errorUsers,
+  } = useGetUsersQuery();
 
-  const user = [
-    {
-      id: 1,
-      name: "Francisco hernandez",
-      img: "https://picsum.photos/200/300",
+  const {
+    loading: isLoadingEstimate,
+    data: dataEstimate,
+    error: errorEstimate,
+  } = useGetPointEstimatesQuery();
+
+  const {
+    data: dateLabels,
+    loading: isLoadingLabels,
+    error: errorLabel,
+  } = useGetLabelsQuery();
+
+  const {
+    reset,
+    control,
+    handleSubmit,
+    formState: { isValid },
+  } = useForm<FormData>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      taskName: "",
+      pointsTask: "",
+      assignee: "",
+      label: [],
+      dueDate: undefined,
     },
-    {
-      id: 2,
-      name: "Maria Rodriguezzzzzzzzzzzxxxxxxxxxx",
-      img: "https://picsum.photos/200/300",
+  });
+
+  const [createTask, { loading: isLoading, error }] = useMutation(CREATE_TASK, {
+    update(cache, { data }) {
+      if (!data?.createTask) return;
+      cache.modify({
+        fields: {
+          tasks(existingTasks = []) {
+            return [...existingTasks, data.createTask];
+          },
+        },
+      });
     },
-    { id: 3, name: "Carlos Martinez", img: "https://picsum.photos/200/300" },
-    { id: 4, name: "Ana Lopez", img: "https://picsum.photos/200/300" },
-    { id: 5, name: "Diego Fernandez", img: "https://picsum.photos/200/300" },
-  ];
+  });
+
+  if (isLoadingUsers || isLoadingEstimate || isLoadingLabels)
+    return <p>Loading...</p>;
+
+  if (errorUsers || errorEstimate || errorLabel) return <p>Error foundata</p>;
+
+  const onSubmit = async (data: FormData) => {
+    await createTask({
+      variables: {
+        input: {
+          assigneeId: data.assignee,
+          dueDate: data.dueDate,
+          name: data.taskName,
+          pointEstimate: data.pointsTask,
+          status: "BACKLOG",
+          tags: data.label,
+        },
+      },
+    });
+
+    setIsShowModal(false);
+    reset();
+  };
+
+  const points =
+    dataEstimate?.__type?.enumValues?.map((item, index) => ({
+      id: String(index + 1),
+      name: pointEstimate[item.name],
+      value: item.name,
+    })) || [];
+
+  const labels =
+    dateLabels?.__type?.enumValues?.map((item, index) => ({
+      id: String(index + 1),
+      name: tagToValue[item.name],
+      value: item.name,
+    })) || [];
+
+  if (isLoading) return <p>Creando...</p>;
+  if (error) return <p>Error: {error.message}</p>;
 
   return (
     <div>
       <Button
-        variant="secondary"
+        variant={isMobile ? "default" : "secondary"}
         className={styles.buttons}
         onClick={() => setIsShowModal(true)}
       >
-        <RiAddFill />
+        {isMobile ? (
+          <div className={styles.containerNewTask}>
+            <RiAddCircleFill />
+            Add Task
+          </div>
+        ) : (
+          <RiAddFill />
+        )}
       </Button>
 
       {isShowModal &&
         createPortal(
           <div className={styles.container}>
             <Modal.Container className={styles.modalContainer}>
-              <Modal.Header className={styles.modalHeader}>
-                task Title
-              </Modal.Header>
-              <Modal.Body className={styles.modalBody}>
-                <ListBox
-                  data={points}
-                  displayKey="value"
-                  key="id"
-                  placeholder="Estimate..."
-                />
-                <ListAvatar
-                  data={user}
-                  displayKey="name"
-                  key="id"
-                  image="img"
-                  placeholder="Assignee"
-                />
-                <ListCheckBox
-                  data={points}
-                  displayKey="value"
-                  key="id"
-                  placeholder="Label"
-                />
-                <CalendarC />
-              </Modal.Body>
-              <Modal.Footer className={styles.modalFooter}>
-                testing
-                <Button variant="primary" onClick={() => setIsShowModal(false)}>
-                  Close
-                </Button>
-              </Modal.Footer>
+              <form
+                autoComplete="off"
+                onSubmit={handleSubmit(onSubmit)}
+                className={styles.formContainer}
+              >
+                <div className={styles.actionContainer}>
+                  <Modal.Header className={styles.modalHeader}>
+                    <label htmlFor="taskNameInput" style={{ display: "none" }}>
+                      task title
+                    </label>
+                    <Controller
+                      name="taskName"
+                      control={control}
+                      render={({ field, fieldState }) => (
+                        <div className={styles.inputContainer}>
+                          <input
+                            id="taskNameInput"
+                            placeholder="Task Title"
+                            value={field.value || ""}
+                            onChange={field.onChange}
+                            onBlur={field.onBlur}
+                            className={styles.inputNewTask}
+                          />
+                          {fieldState.error && (
+                            <span style={{ color: "red" }}>
+                              {fieldState.error.message}
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    />
+                  </Modal.Header>
+
+                  <Modal.Body className={styles.modalBody}>
+                    <Controller
+                      name="pointsTask"
+                      control={control}
+                      render={({ field, fieldState }) => (
+                        <div>
+                          <ListBox
+                            data={points}
+                            displayKey="name"
+                            valueKey="value"
+                            placeholder="Estimate"
+                            value={field.value}
+                            onChange={field.onChange}
+                          />
+                          {fieldState.error && (
+                            <span style={{ color: "red" }}>
+                              {fieldState.error.message}
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    />
+
+                    <Controller
+                      name="assignee"
+                      control={control}
+                      render={({ field, fieldState }) => (
+                        <div>
+                          <ListAvatar
+                            data={dataUsers?.users || []}
+                            displayKey="fullName"
+                            valueKey="id"
+                            placeholder="Assignee"
+                            value={field.value}
+                            onChange={field.onChange}
+                          />
+                          {fieldState.error && (
+                            <span style={{ color: "red" }}>
+                              {fieldState.error.message}
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    />
+
+                    <Controller
+                      name="label"
+                      control={control}
+                      render={({ field, fieldState }) => (
+                        <div>
+                          <ListCheckBox
+                            data={labels}
+                            displayKey="name"
+                            valueKey="value"
+                            placeholder="Label"
+                            value={field.value}
+                            onChange={field.onChange}
+                          />
+                          {fieldState.error && (
+                            <span style={{ color: "red" }}>
+                              {fieldState.error.message}
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    />
+                    <Controller
+                      name="dueDate"
+                      control={control}
+                      render={({ field, fieldState }) => (
+                        <div>
+                          <CalendarC
+                            value={field.value}
+                            onChange={field.onChange}
+                            placeholder="Due Date"
+                          />
+                          {fieldState.error && (
+                            <span style={{ color: "red" }}>
+                              {fieldState.error.message}
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    />
+                  </Modal.Body>
+                </div>
+                <Modal.Footer className={styles.modalFooter}>
+                  <Button
+                    type="button"
+                    className={styles.closeButton}
+                    onClick={() => {
+                      setIsShowModal(false);
+                      reset();
+                    }}
+                  >
+                    {isMobile ? <RiCloseLargeLine /> : "Cancel"}
+                  </Button>
+                  <Button
+                    variant={isMobile ? "defaul" : "secondary"}
+                    type="submit"
+                    disabled={!isValid}
+                    className={styles.buttonSend}
+                  >
+                    Create
+                  </Button>
+                </Modal.Footer>
+              </form>
             </Modal.Container>
           </div>,
           document.getElementById("modal-root")!,
