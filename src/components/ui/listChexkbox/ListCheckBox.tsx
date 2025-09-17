@@ -4,15 +4,16 @@ import {
   ListboxOption,
   ListboxOptions,
 } from "@headlessui/react";
-import { useState } from "react";
 import styles from "./listCheckBox.module.scss";
 import { RiPriceTag3Fill } from "@remixicon/react";
 
 interface ListBoxProps<T> {
   data: T[];
   displayKey: keyof T;
-  valueKey?: keyof T;
+  valueKey: keyof T;
   placeholder?: string;
+  value: string[];
+  onChange: (value: string[]) => void;
 }
 
 export const ListCheckBox = <T,>({
@@ -20,39 +21,40 @@ export const ListCheckBox = <T,>({
   displayKey,
   valueKey,
   placeholder = "Selecciona una opción",
+  value,
+  onChange,
 }: ListBoxProps<T>) => {
-  const [selectedItems, setSelectedItems] = useState<T[]>([]);
-
   const handleSelectionChange = (item: T) => {
-    setSelectedItems((prevSelected) => {
-      const isAlreadySelected = prevSelected.some((selected) =>
-        valueKey ? selected[valueKey] === item[valueKey] : selected === item,
-      );
+    const itemString = String(item[valueKey]);
+    const isAlreadySelected = value.includes(itemString);
 
-      if (isAlreadySelected) {
-        return prevSelected.filter((selected) =>
-          valueKey ? selected[valueKey] !== item[valueKey] : selected !== item,
-        );
-      } else {
-        return [...prevSelected, item];
-      }
-    });
+    let newValue: string[];
+    if (isAlreadySelected) {
+      newValue = value.filter((selected) => selected !== itemString);
+    } else {
+      newValue = [...value, itemString];
+    }
+
+    onChange(newValue);
   };
 
   const isItemSelected = (item: T): boolean => {
-    return selectedItems.some((selected) =>
-      valueKey ? selected[valueKey] === item[valueKey] : selected === item,
-    );
+    const itemString = String(item[valueKey]);
+    return value.includes(itemString);
   };
 
   const getDisplayText = (): string => {
-    if (selectedItems.length === 0) return placeholder;
-    if (selectedItems.length === 1) return String(selectedItems[0][displayKey]);
-    return `${String(selectedItems[0][displayKey])} +${selectedItems.length - 1}`;
+    if (value.length === 0) return placeholder;
+
+    const firstItem = data.find((item) => String(item[valueKey]) === value[0]);
+    const firstLabel = firstItem ? String(firstItem[displayKey]) : value[0];
+
+    if (value.length === 1) return firstLabel;
+    return `${firstLabel} +${value.length - 1}`;
   };
 
   return (
-    <Listbox value={selectedItems} onChange={() => {}} multiple>
+    <Listbox value={value} onChange={() => {}} multiple>
       <ListboxButton className={styles.listButton}>
         <RiPriceTag3Fill />
         {getDisplayText()}
@@ -63,7 +65,10 @@ export const ListCheckBox = <T,>({
             key={valueKey ? String(item[valueKey]) : index}
             value={item}
             className={styles.listBoxElements}
-            onClick={() => handleSelectionChange(item)}
+            onClick={(e) => {
+              e.preventDefault();
+              handleSelectionChange(item);
+            }}
           >
             <input
               type="checkbox"
