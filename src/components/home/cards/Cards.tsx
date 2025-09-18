@@ -33,7 +33,18 @@ export const Cards = ({ task }: { task: Task }) => {
     <Card.Container className={styles.cardContainer}>
       <Card.Header className={styles.cardHeader}>
         <Text variant="title">{task.name}</Text>
-        <DropdownEdit task={{ id: task.id }} />
+        <DropdownEdit
+          task={{ id: task.id }}
+          taskElement={{
+            id: task.id,
+            assigneeId: { id: task.assignee?.id || "" },
+            dueDate: task.dueDate,
+            name: task.name,
+            pointEstimate: task.pointEstimate,
+            status: task.status,
+            tags: task.tags,
+          }}
+        />
       </Card.Header>
       <Card.Body className={styles.cardBody}>
         <div className={styles.pointsContainer}>

@@ -43,8 +43,8 @@ export const GET_USERS = gql`
 `;
 
 export const TASKS = gql`
-  query GetTasks {
-    tasks(input: {}) {
+  query GetTasks($input: FilterTaskInput!) {
+    tasks(input: $input) {
       id
       name
       status
@@ -79,6 +79,23 @@ export const DELETE_TASK = gql`
   mutation DeleteTask($input: DeleteTaskInput!) {
     deleteTask(input: $input) {
       id
+    }
+  }
+`;
+
+export const EDIT_TASK = gql`
+  mutation EditTask($input: UpdateTaskInput!) {
+    updateTask(input: $input) {
+      assignee {
+        id
+        fullName
+      }
+      dueDate
+      id
+      name
+      pointEstimate
+      status
+      tags
     }
   }
 `;
