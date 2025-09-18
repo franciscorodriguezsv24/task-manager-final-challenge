@@ -5,8 +5,10 @@ import {
   useGetColumnsQuery,
   useGetTasksQuery,
 } from "../../../generated/graphql";
+import useCardStore from "../../../store/useEditManager";
 
 export const Tasks = () => {
+  const { searchCardElement } = useCardStore();
   const {
     loading: isloadingCols,
     data: colsData,
@@ -16,9 +18,18 @@ export const Tasks = () => {
     loading: isloadingTasks,
     data: tasksData,
     error: errorData,
-  } = useGetTasksQuery();
+  } = useGetTasksQuery({
+    variables: {
+      input: searchCardElement ? { name: searchCardElement } : {},
+    },
+  });
 
-  if (isloadingCols || isloadingTasks) return <p>Cargando...</p>;
+  if (isloadingCols || isloadingTasks)
+    return (
+      <div className={styles.spinnerContainer}>
+        <span className={styles.loader}></span>
+      </div>
+    );
 
   if (errorCols || errorData) return <p>Unexpected Error</p>;
 
@@ -40,7 +51,9 @@ export const Tasks = () => {
       {columns.map((col) => (
         <div key={col.name} className={styles.taskColumns}>
           <div className={styles.headerTask}>
-            <Text variant="title">{col.name}</Text>
+            <Text variant="title">
+              {col.name}({tasksByStatus[col.name]?.length || 0})
+            </Text>
           </div>
           <div className={styles.tasks}>
             {tasksByStatus[col.name]?.map((task) => (

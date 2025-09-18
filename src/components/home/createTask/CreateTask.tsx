@@ -20,7 +20,8 @@ import {
 } from "../../../generated/graphql";
 import { tagToValue } from "../../../hooks/TagValue";
 import { pointEstimate } from "../../../hooks/PointEstimate";
-import { useMediaQuery } from "../../../hooks/UseMediaQuery";
+import { UseMediaQuery } from "../../../hooks/UseMediaQuery";
+import { useCustomToast } from "../../../hooks/UseCustomToast";
 
 const formSchema = z.object({
   taskName: z.string().min(3, "Add a validate task's name"),
@@ -33,7 +34,8 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 export const CreateTask = () => {
-  const isMobile = useMediaQuery("(max-width: 880px)");
+  const isMobile = UseMediaQuery("(max-width: 880px)");
+  const { showToast } = useCustomToast();
 
   const [isShowModal, setIsShowModal] = useState<boolean>(false);
 
@@ -71,18 +73,21 @@ export const CreateTask = () => {
     },
   });
 
-  const [createTask, { loading: isLoading, error }] = useMutation(CREATE_TASK, {
-    update(cache, { data }) {
-      if (!data?.createTask) return;
-      cache.modify({
-        fields: {
-          tasks(existingTasks = []) {
-            return [...existingTasks, data.createTask];
+  const [createTask, { loading: isLoading, error: errorCreate }] = useMutation(
+    CREATE_TASK,
+    {
+      update(cache, { data }) {
+        if (!data?.createTask) return;
+        cache.modify({
+          fields: {
+            tasks(existingTasks = []) {
+              return [...existingTasks, data.createTask];
+            },
           },
-        },
-      });
+        });
+      },
     },
-  });
+  );
 
   if (isLoadingUsers || isLoadingEstimate || isLoadingLabels)
     return <p>Loading...</p>;
@@ -90,21 +95,29 @@ export const CreateTask = () => {
   if (errorUsers || errorEstimate || errorLabel) return <p>Error foundata</p>;
 
   const onSubmit = async (data: FormData) => {
-    await createTask({
-      variables: {
-        input: {
-          assigneeId: data.assignee,
-          dueDate: data.dueDate,
-          name: data.taskName,
-          pointEstimate: data.pointsTask,
-          status: "BACKLOG",
-          tags: data.label,
+    try {
+      await createTask({
+        variables: {
+          input: {
+            assigneeId: data.assignee,
+            dueDate: data.dueDate,
+            name: data.taskName,
+            pointEstimate: data.pointsTask,
+            status: "BACKLOG",
+            tags: data.label,
+          },
         },
-      },
-    });
-
-    setIsShowModal(false);
-    reset();
+      });
+      showToast("success", "Your task has been created successfully");
+      setIsShowModal(false);
+      reset();
+    } catch (error) {
+      console.error(error);
+      return showToast(
+        "error",
+        `Failed to create task. Please try again ${errorCreate?.message}.`,
+      );
+    }
   };
 
   const points =
@@ -122,7 +135,6 @@ export const CreateTask = () => {
     })) || [];
 
   if (isLoading) return <p>Creando...</p>;
-  if (error) return <p>Error: {error.message}</p>;
 
   return (
     <div>
@@ -270,7 +282,6 @@ export const CreateTask = () => {
                     className={styles.closeButton}
                     onClick={() => {
                       setIsShowModal(false);
-                      reset();
                     }}
                   >
                     {isMobile ? <RiCloseLargeLine /> : "Cancel"}
