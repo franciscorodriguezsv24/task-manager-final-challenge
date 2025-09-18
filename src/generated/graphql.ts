@@ -306,7 +306,9 @@ export type GetUsersQuery = {
   }>;
 };
 
-export type GetTasksQueryVariables = Exact<{ [key: string]: never }>;
+export type GetTasksQueryVariables = Exact<{
+  input: FilterTaskInput;
+}>;
 
 export type GetTasksQuery = {
   __typename: "Query";
@@ -346,6 +348,24 @@ export type DeleteTaskMutationVariables = Exact<{
 export type DeleteTaskMutation = {
   __typename: "Mutation";
   deleteTask: { __typename: "Task"; id: string };
+};
+
+export type EditTaskMutationVariables = Exact<{
+  input: UpdateTaskInput;
+}>;
+
+export type EditTaskMutation = {
+  __typename: "Mutation";
+  updateTask: {
+    __typename: "Task";
+    dueDate: Date;
+    id: string;
+    name: string;
+    pointEstimate: PointEstimate;
+    status: Status;
+    tags: Array<TaskTag>;
+    assignee: { __typename: "User"; id: string; fullName: string } | null;
+  };
 };
 
 export const GetColumnsDocument = gql`
@@ -652,8 +672,8 @@ export type GetUsersQueryResult = Apollo.QueryResult<
   GetUsersQueryVariables
 >;
 export const GetTasksDocument = gql`
-  query GetTasks {
-    tasks(input: {}) {
+  query GetTasks($input: FilterTaskInput!) {
+    tasks(input: $input) {
       id
       name
       status
@@ -680,11 +700,13 @@ export const GetTasksDocument = gql`
  * @example
  * const { data, loading, error } = useGetTasksQuery({
  *   variables: {
+ *      input: // value for 'input'
  *   },
  * });
  */
 export function useGetTasksQuery(
-  baseOptions?: Apollo.QueryHookOptions<GetTasksQuery, GetTasksQueryVariables>,
+  baseOptions: Apollo.QueryHookOptions<GetTasksQuery, GetTasksQueryVariables> &
+    ({ variables: GetTasksQueryVariables; skip?: boolean } | { skip: boolean }),
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<GetTasksQuery, GetTasksQueryVariables>(
@@ -836,4 +858,60 @@ export type DeleteTaskMutationResult =
 export type DeleteTaskMutationOptions = Apollo.BaseMutationOptions<
   DeleteTaskMutation,
   DeleteTaskMutationVariables
+>;
+export const EditTaskDocument = gql`
+  mutation EditTask($input: UpdateTaskInput!) {
+    updateTask(input: $input) {
+      assignee {
+        id
+        fullName
+      }
+      dueDate
+      id
+      name
+      pointEstimate
+      status
+      tags
+    }
+  }
+`;
+export type EditTaskMutationFn = Apollo.MutationFunction<
+  EditTaskMutation,
+  EditTaskMutationVariables
+>;
+
+/**
+ * __useEditTaskMutation__
+ *
+ * To run a mutation, you first call `useEditTaskMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditTaskMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editTaskMutation, { data, loading, error }] = useEditTaskMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useEditTaskMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    EditTaskMutation,
+    EditTaskMutationVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<EditTaskMutation, EditTaskMutationVariables>(
+    EditTaskDocument,
+    options,
+  );
+}
+export type EditTaskMutationHookResult = ReturnType<typeof useEditTaskMutation>;
+export type EditTaskMutationResult = Apollo.MutationResult<EditTaskMutation>;
+export type EditTaskMutationOptions = Apollo.BaseMutationOptions<
+  EditTaskMutation,
+  EditTaskMutationVariables
 >;

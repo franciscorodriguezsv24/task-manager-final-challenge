@@ -1,8 +1,15 @@
+import useCardStore from "../../../store/useEditManager";
 import { Avatar } from "../../ui/avatar/Avatar";
 import styles from "./searchbar.module.scss";
 import { RiNotification3Line, RiSearch2Line } from "@remixicon/react";
 
 export const SearchBar = () => {
+  const { searchCardElement, searchCard } = useCardStore();
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    searchCard(e.target.value);
+  };
+
   return (
     <div className={styles.navbarContainer}>
       <div className={styles.inputSearchContainer}>
@@ -12,8 +19,8 @@ export const SearchBar = () => {
         </label>
         <input
           type="text"
-          //   value={searchTerm}
-          //   onChange={(e) => setSearchTerm(e.target.value)}
+          value={searchCardElement || ""}
+          onChange={handleInputChange}
           placeholder="search"
           className={styles.homeInput}
         />
