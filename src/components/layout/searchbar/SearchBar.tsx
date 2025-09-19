@@ -1,5 +1,6 @@
 import useCardStore from "../../../store/useEditManager";
-import { Avatar } from "../../ui/avatar/Avatar";
+import { Filters } from "../../home/filters/Filters";
+import { UserUtils } from "../../user/userUtils/UserUtils";
 import styles from "./searchbar.module.scss";
 import { RiNotification3Line, RiSearch2Line } from "@remixicon/react";
 
@@ -18,6 +19,7 @@ export const SearchBar = () => {
           Search
         </label>
         <input
+          id="searchStore"
           type="text"
           value={searchCardElement || ""}
           onChange={handleInputChange}
@@ -25,8 +27,11 @@ export const SearchBar = () => {
           className={styles.homeInput}
         />
         <div className={styles.avatarContainer}>
-          <RiNotification3Line />
-          <Avatar imgUrl="https://picsum.photos/200/300" alt="testing" />
+          <div className={styles.filterContainer}>
+            <Filters />
+          </div>
+          <RiNotification3Line className={styles.notificationIcon} />
+          <UserUtils />
         </div>
       </div>
     </div>

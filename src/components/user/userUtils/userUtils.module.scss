@@ -1,0 +1,59 @@
+@use '../../../styles/global' as *;
+
+.container{
+    text-align: right;
+}
+
+.buttonActionUser{
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--primary-color);
+    font-size: 0.875rem;
+    line-height: 1.5;
+    font-weight: 600;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 50%;
+
+    @media (min-width:880px) {
+        background-color: var(--secondary-color);
+    } 
+}
+
+.mainButtonUser{
+    position:absolute;
+    width: 8rem;
+    transform-origin: top right;
+    border-radius: 0.75rem;
+    border: 1px solid $primary-gray;
+    background-color:#393D41;
+    padding: 0.25rem;
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+    color: white;
+    --anchor-gap: 0.25rem;
+}
+
+.buttonDropdownUser{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+    background-color:#393D41;
+    color: white;
+    border: none;
+    text-decoration: none;
+    font-family: 'Roboto', sans-serif;
+
+    &[data-focus] {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+}
+
+.buttonDropdownUser:hover{
+    background-color: rgba(255, 255, 255, 0.1);
+}
