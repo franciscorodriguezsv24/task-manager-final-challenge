@@ -8,15 +8,17 @@ import { UseMediaQuery } from "./hooks/UseMediaQuery";
 export const Layout = () => {
   const isMobile = UseMediaQuery("(max-width: 880px)");
   return (
-    <div className={styles.container}>
-      <div className={styles.sidebarContainer}>
-        <Sidebar />
-      </div>
-      <div className={styles.contentContainer}>
-        <SearchBar />
-        <Outlet />
+    <>
+      <div className={styles.container}>
+        <div className={styles.sidebarContainer}>
+          <Sidebar />
+        </div>
+        <div className={styles.contentContainer}>
+          <SearchBar />
+          <Outlet />
+        </div>
       </div>
       <Toaster position={isMobile ? "top-center" : "bottom-right"} />
-    </div>
+    </>
   );
 };

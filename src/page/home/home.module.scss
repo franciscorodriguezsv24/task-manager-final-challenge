@@ -42,3 +42,17 @@
         margin-right: 0px;
     }
 }
+
+.actionContainer{
+    display: flex;
+    gap: 1rem;
+}
+
+.tabSelectedContainer{
+    display: block;
+    width: 100%;
+
+    @media (min-width:880px) {
+        display: none;
+    }
+}
