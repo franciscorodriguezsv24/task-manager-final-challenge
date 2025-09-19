@@ -23,6 +23,7 @@ import {
   RiArrowRightSLine,
   RiCalendarCheckLine,
 } from "@remixicon/react";
+import { formatDate } from "../../../hooks/FormatedDate";
 
 interface CalendarProps {
   value?: Date | null;
@@ -59,16 +60,6 @@ export const CalendarC = ({
     const todayDateValue = today(getLocalTimeZone());
     const todayDate = dateValueToDate(todayDateValue);
     onChange?.(todayDate);
-  };
-
-  const formatDate = (date: Date | null) => {
-    if (!date) return "";
-    const month = new Intl.DateTimeFormat("en-US", { month: "short" }).format(
-      date,
-    );
-    const day = date.getDate();
-    const year = date.getFullYear();
-    return `${month}. ${day} ${year}`; // Dec. 16 2020
   };
 
   return (

@@ -13,6 +13,7 @@ import { DropdownEdit } from "../dropdownEdit/DropdownEdit";
 import type { GetTasksQuery } from "../../../generated/graphql";
 import { pointEstimate } from "../../../hooks/PointEstimate";
 import { tagToValue } from "../../../hooks/TagValue";
+import { formatDate } from "../../../hooks/FormatedDate";
 
 function numberName(point: string): string | null {
   return pointEstimate[point] ?? null;
@@ -49,8 +50,8 @@ export const Cards = ({ task }: { task: Task }) => {
       <Card.Body className={styles.cardBody}>
         <div className={styles.pointsContainer}>
           <Text variant="title">{numberName(task.pointEstimate)}</Text>
-          <Badge variant="default">
-            <RiAlarmLine /> Today
+          <Badge date={task.dueDate}>
+            <RiAlarmLine /> {formatDate(task.dueDate)}
           </Badge>
         </div>
         <div className={styles.badgeContainer}>
