@@ -12,6 +12,14 @@ type TaskSelected = {
   tags: string[];
 };
 
+type FiltersProps = {
+  dueDate: Date | null;
+  assigneeId: string;
+  pointEstimate: string;
+  status: string;
+  tags: string[];
+};
+
 type CardStore = {
   selectedCard: TaskSelected | null;
   selectCard: (card: TaskSelected) => void;
@@ -19,6 +27,8 @@ type CardStore = {
   selectIdCard: (id: string) => void;
   searchCardElement: string | null;
   searchCard: (search: string) => void;
+  filtersElement: FiltersProps | null;
+  filtersSelected: (filter: FiltersProps) => void;
 };
 
 const useCardStore = create<CardStore>((set) => ({
@@ -38,6 +48,12 @@ const useCardStore = create<CardStore>((set) => ({
   searchCardElement: null,
   searchCard: (search) => {
     set({ searchCardElement: search });
+  },
+
+  filtersElement: null,
+
+  filtersSelected: (filter) => {
+    set({ filtersElement: filter });
   },
 }));
 
