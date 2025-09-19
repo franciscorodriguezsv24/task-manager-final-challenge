@@ -6,6 +6,10 @@
     border-radius: 4px;
     border: none;
     padding: 0px 10px 0px 10px;
+        display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap:0.5rem;
 }
 
 .default{
@@ -22,16 +26,19 @@
 .primary{
     background: $secondary-green;
     color: $primary-green;
+    text-transform: uppercase;
 }
 
 .secondary{
     background: $secondary-yellow;
     color: $primary-yellow;
+    text-transform: uppercase;
 }
 
 .warning{
     background: $secondary-red; 
     color: $primary-red;
+    text-transform: uppercase;
 }
 
 .react{
