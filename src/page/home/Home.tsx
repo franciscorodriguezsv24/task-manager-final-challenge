@@ -3,6 +3,8 @@ import { Button } from "../../components/ui/button/Button";
 import styles from "./home.module.scss";
 import { Tasks } from "../../components/home/tasks/Tasks";
 import { CreateTask } from "../../components/home/createTask/CreateTask";
+import { Filters } from "../../components/home/filters/Filters";
+import { TabSelect } from "../../components/ui/TabSelect/TabSelect";
 
 export const Home = () => {
   return (
@@ -16,7 +18,13 @@ export const Home = () => {
             <RiGalleryView2 />
           </Button>
         </div>
-        <CreateTask />
+        <div className={styles.actionContainer}>
+          <Filters />
+          <CreateTask />
+        </div>
+      </div>
+      <div className={styles.tabSelectedContainer}>
+        <TabSelect />
       </div>
       <div className={styles.tasksArea}>
         <Tasks />

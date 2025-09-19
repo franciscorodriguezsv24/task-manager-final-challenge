@@ -1,9 +1,10 @@
 @use '../../../styles/global' as *;
 
 .inputSearchContainer {
-    width: 70%;
+    width: 55%;
     position: relative;
     margin:10px;
+    padding: 2px;
 
     @media (min-width: 880px) {
         width: 100%;
@@ -13,23 +14,28 @@
 }
 
 .homeInput {
-    padding-left: 4.5rem;
-    width: 100%;
-    height: 68px;
-    position: relative;
-    border-radius: 16px;
-    border: none;
-    background: var(--secondary-color);
-    color: $primary-gray;
-    font-size: 15px;
-    font-weight: 400;
-    padding-right: 5px;
+  padding-left: 4rem;
+  width: 100%;
+  height: 68px;
+  position: relative;
+  border-radius: 16px;
+  border: none;
+  background: var(--secondary-color);
+  color: $primary-gray;
+  font-size: 15px;
+  font-weight: 400;
+  padding-right: 5px;
+  outline: none;
 
+  @media (min-width: 880px) {
+    padding-left: 3rem;
+    padding-right: 7rem;
+  }
 
-    @media (min-width:880px) {
-        padding-left: 3rem;
-        padding-right: 7rem;
-    }
+  &:focus {
+    outline: 2px solid $primary-red;
+    box-shadow: 0 0 6px rgba($primary-red, 0.5);
+  }
 }
 
 .homeInput::placeholder {
@@ -60,14 +66,14 @@
 .avatarContainer{
     position: absolute;
     top: 50%;
-    right: -100px;
+    right: -140px;
 
     color: $primary-gray;
     transform: translateY(-50%);
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 1rem;
+    gap: 0.5rem;
 
     @media(min-width: 880px){
     right: 25px;
@@ -76,6 +82,13 @@
 
 }
 
+.filterContainer{
+    display: block;
+
+    @media (min-width:880px) {
+        display: none;
+    }
+}
 .visuallyHidden {
   position: absolute;
   width: 1px;
@@ -86,4 +99,8 @@
   clip: rect(0, 0, 0, 0);
   border: 0;
   white-space: nowrap;
+}
+
+.notificationIcon{
+    width: 2rem;
 }

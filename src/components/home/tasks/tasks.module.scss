@@ -8,11 +8,10 @@
     justify-content: flex-start;
     gap: 2rem;
 
-   @media (min-width:880px) {
+  @media (min-width:880px) {
         height: 82%;
-
-
-   }
+    justify-content: start;
+  }
 }
 
 .taskColumns{
@@ -63,3 +62,15 @@
         transform: rotate(360deg);
     }
     } 
+    .textUnavailable{
+    display: flex;
+    width: 125px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: $primary-gray;
+}
+
+.textError{
+    color: $primary-gray;
+  }
