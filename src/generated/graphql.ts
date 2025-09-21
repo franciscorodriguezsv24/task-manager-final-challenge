@@ -282,6 +282,16 @@ export type GetPointEstimatesQuery = {
   } | null;
 };
 
+export type GetStatusQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetStatusQuery = {
+  __typename: "Query";
+  __type: {
+    __typename: "__Type";
+    enumValues: Array<{ __typename: "__EnumValue"; name: string }> | null;
+  } | null;
+};
+
 export type GetLabelsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetLabelsQuery = {
@@ -539,6 +549,80 @@ export type GetPointEstimatesSuspenseQueryHookResult = ReturnType<
 export type GetPointEstimatesQueryResult = Apollo.QueryResult<
   GetPointEstimatesQuery,
   GetPointEstimatesQueryVariables
+>;
+export const GetStatusDocument = gql`
+  query GetStatus {
+    __type(name: "Status") {
+      enumValues {
+        name
+      }
+    }
+  }
+`;
+
+/**
+ * __useGetStatusQuery__
+ *
+ * To run a query within a React component, call `useGetStatusQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetStatusQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetStatusQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetStatusQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetStatusQuery,
+    GetStatusQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetStatusQuery, GetStatusQueryVariables>(
+    GetStatusDocument,
+    options,
+  );
+}
+export function useGetStatusLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetStatusQuery,
+    GetStatusQueryVariables
+  >,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetStatusQuery, GetStatusQueryVariables>(
+    GetStatusDocument,
+    options,
+  );
+}
+export function useGetStatusSuspenseQuery(
+  baseOptions?:
+    | Apollo.SkipToken
+    | Apollo.SuspenseQueryHookOptions<GetStatusQuery, GetStatusQueryVariables>,
+) {
+  const options =
+    baseOptions === Apollo.skipToken
+      ? baseOptions
+      : { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<GetStatusQuery, GetStatusQueryVariables>(
+    GetStatusDocument,
+    options,
+  );
+}
+export type GetStatusQueryHookResult = ReturnType<typeof useGetStatusQuery>;
+export type GetStatusLazyQueryHookResult = ReturnType<
+  typeof useGetStatusLazyQuery
+>;
+export type GetStatusSuspenseQueryHookResult = ReturnType<
+  typeof useGetStatusSuspenseQuery
+>;
+export type GetStatusQueryResult = Apollo.QueryResult<
+  GetStatusQuery,
+  GetStatusQueryVariables
 >;
 export const GetLabelsDocument = gql`
   query GetLabels {
