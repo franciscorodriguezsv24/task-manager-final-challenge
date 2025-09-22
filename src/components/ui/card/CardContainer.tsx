@@ -1,14 +1,16 @@
-import type { ReactNode } from "react";
+import { forwardRef, type ReactNode, type HTMLAttributes } from "react";
 
-interface CardProps {
+export interface CardProps extends HTMLAttributes<HTMLDivElement> {
+  className?: string;
   children: ReactNode;
-  className: string;
 }
 
-export const CardContainer = ({ children, className, ...props }: CardProps) => {
-  return (
-    <div className={className} {...props}>
-      {children}
-    </div>
-  );
-};
+export const CardContainer = forwardRef<HTMLDivElement, CardProps>(
+  ({ children, className, ...props }, ref) => {
+    return (
+      <div ref={ref} className={className} {...props}>
+        {children}
+      </div>
+    );
+  },
+);

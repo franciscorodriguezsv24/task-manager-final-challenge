@@ -14,6 +14,9 @@ import type { GetTasksQuery } from "../../../generated/graphql";
 import { pointEstimate } from "../../../hooks/PointEstimate";
 import { tagToValue } from "../../../hooks/TagValue";
 import { formatDate } from "../../../hooks/FormatedDate";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { UseMediaQuery } from "../../../hooks/UseMediaQuery";
 
 function numberName(point: string): string | null {
   return pointEstimate[point] ?? null;
@@ -30,8 +33,91 @@ const random0T09 = Math.floor(Math.random() * 10);
 const random0To100 = Math.floor(Math.random() * 100) + 1;
 
 export const Cards = ({ task }: { task: Task }) => {
+  const isMobile = UseMediaQuery("(max-width: 880px)");
+
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: task.id,
+    disabled: isMobile,
+    data: {
+      type: "task",
+      task: task,
+    },
+  });
+
+  const isFormElement = (target: HTMLElement): boolean => {
+    return (
+      target.tagName === "INPUT" ||
+      target.tagName === "TEXTAREA" ||
+      target.tagName === "SELECT" ||
+      target.contentEditable === "true" ||
+      target.closest("input") !== null ||
+      target.closest("textarea") !== null ||
+      target.closest("select") !== null ||
+      target.closest('[contenteditable="true"]') !== null ||
+      target.closest("#modal-root") !== null
+    );
+  };
+
+  const smartListeners = {
+    ...listeners,
+    onKeyDown: (event: React.KeyboardEvent) => {
+      const target = event.target as HTMLElement;
+
+      if (isFormElement(target)) {
+        return;
+      }
+
+      if (listeners?.onKeyDown) {
+        listeners.onKeyDown(event);
+      }
+    },
+    onMouseDown: (event: React.MouseEvent) => {
+      const target = event.target as HTMLElement;
+
+      if (isFormElement(target)) {
+        return;
+      }
+
+      if (listeners?.onMouseDown) {
+        listeners.onMouseDown(event);
+      }
+    },
+    onPointerDown: (event: React.PointerEvent) => {
+      const target = event.target as HTMLElement;
+
+      if (isFormElement(target)) {
+        return;
+      }
+
+      if (listeners?.onPointerDown) {
+        listeners.onPointerDown(event);
+      }
+    },
+  };
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.3 : 1,
+    cursor: isDragging ? "grabbing" : "grab",
+    zIndex: isDragging ? 1000 : "auto",
+  };
+
   return (
-    <Card.Container className={styles.cardContainer}>
+    <Card.Container
+      ref={setNodeRef}
+      {...smartListeners}
+      {...attributes}
+      className={styles.cardContainer}
+      style={style}
+    >
       <Card.Header className={styles.cardHeader}>
         <Text variant="title">{task.name}</Text>
         <DropdownEdit

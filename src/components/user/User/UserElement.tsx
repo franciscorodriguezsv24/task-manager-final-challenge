@@ -11,7 +11,7 @@ import {
   RiStairsLine,
 } from "@remixicon/react";
 import { useQuery } from "@apollo/client";
-import { GET_PROFILE } from "../../graphql/queries.graphql";
+import { GET_PROFILE } from "../../../api/graphql/queries.graphql";
 import { formatDate } from "../../../hooks/FormatedDate";
 
 export const UserElement = () => {
