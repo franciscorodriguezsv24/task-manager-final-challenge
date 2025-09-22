@@ -121,11 +121,11 @@
     font-size: 15px;
     border-radius: 8px;
     background-color: var(--secondary-color);
-    color: $primary-gray;
+    color: var(--primary-text);
     border: none;
     @media (min-width:880px) {
             background-color: $primary-red;
-    color: var(--primary-color);
+    color: var(--primary-text);
     }
 
 }

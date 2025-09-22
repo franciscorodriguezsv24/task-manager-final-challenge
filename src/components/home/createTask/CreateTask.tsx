@@ -120,12 +120,16 @@ export const CreateTask = () => {
     }
   };
 
+  const order = Object.keys(pointEstimate);
+
   const points =
-    dataEstimate?.__type?.enumValues?.map((item, index) => ({
-      id: String(index + 1),
-      name: pointEstimate[item.name],
-      value: item.name,
-    })) || [];
+    dataEstimate?.__type?.enumValues
+      ?.map((item, index) => ({
+        id: String(index + 1),
+        name: pointEstimate[item.name],
+        value: item.name,
+      }))
+      .sort((a, b) => order.indexOf(a.value) - order.indexOf(b.value)) || [];
 
   const labels =
     dateLabels?.__type?.enumValues?.map((item, index) => ({
@@ -133,8 +137,6 @@ export const CreateTask = () => {
       name: tagToValue[item.name],
       value: item.name,
     })) || [];
-
-  if (isLoading) return <p>Creando...</p>;
 
   return (
     <div>
@@ -289,7 +291,7 @@ export const CreateTask = () => {
                   <Button
                     variant={isMobile ? "defaul" : "secondary"}
                     type="submit"
-                    disabled={!isValid}
+                    disabled={!isValid || isLoading}
                     className={styles.buttonSend}
                   >
                     Create

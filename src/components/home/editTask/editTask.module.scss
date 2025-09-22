@@ -213,3 +213,11 @@
 .ToastElement{
     background: $primary-green;
 }
+
+.spinnerContainer{
+    position: absolute;
+    width: 100%;
+    z-index: 1005;
+    left: -130px;
+    top: 60px;
+}
