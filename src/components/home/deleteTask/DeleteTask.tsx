@@ -1,7 +1,7 @@
 import { createPortal } from "react-dom";
 import { Button } from "../../ui/button/Button";
 import { useMutation, type Reference } from "@apollo/client";
-import { DELETE_TASK } from "../../graphql/queries.graphql";
+import { DELETE_TASK } from "../../../api/graphql/queries.graphql";
 import { Modal } from "../../ui/modal/Modal";
 import styles from "./deleteTask.module.scss";
 import { Text } from "../../ui/text/Text";
