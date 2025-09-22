@@ -12,7 +12,7 @@ import { z } from "zod";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@apollo/client";
-import { CREATE_TASK } from "../../graphql/queries.graphql";
+import { CREATE_TASK } from "../../../api/graphql/queries.graphql";
 import {
   useGetLabelsQuery,
   useGetPointEstimatesQuery,
@@ -24,7 +24,10 @@ import { UseMediaQuery } from "../../../hooks/UseMediaQuery";
 import { useCustomToast } from "../../../hooks/UseCustomToast";
 
 const formSchema = z.object({
-  taskName: z.string().min(3, "Add a validate task's name"),
+  taskName: z
+    .string()
+    .min(3, "Add a validate task's name")
+    .max(30, "The name is to long"),
   pointsTask: z.string().min(1, "this field is required"),
   assignee: z.string().min(1, "this field is required"),
   label: z.array(z.string()).min(1, "This field is required"),
@@ -172,23 +175,31 @@ export const CreateTask = () => {
                     <Controller
                       name="taskName"
                       control={control}
-                      render={({ field, fieldState }) => (
-                        <div className={styles.inputContainer}>
-                          <input
-                            id="taskNameInput"
-                            placeholder="Task Title"
-                            value={field.value || ""}
-                            onChange={field.onChange}
-                            onBlur={field.onBlur}
-                            className={styles.inputNewTask}
-                          />
-                          {fieldState.error && (
-                            <span style={{ color: "red" }}>
-                              {fieldState.error.message}
-                            </span>
-                          )}
-                        </div>
-                      )}
+                      render={({ field, fieldState }) => {
+                        const isTooLong = field.value.length > 30;
+                        return (
+                          <div className={styles.inputContainer}>
+                            <input
+                              id="taskNameInput"
+                              placeholder="Task Title"
+                              value={field.value || ""}
+                              onChange={field.onChange}
+                              onBlur={field.onBlur}
+                              className={styles.inputNewTask}
+                            />
+                            {fieldState.error && (
+                              <span style={{ color: "red" }}>
+                                {fieldState.error.message}
+                              </span>
+                            )}
+                            {isTooLong && !fieldState.error && (
+                              <span className={styles.errorInput}>
+                                The task name cannot exceed 30 characters
+                              </span>
+                            )}
+                          </div>
+                        );
+                      }}
                     />
                   </Modal.Header>
 

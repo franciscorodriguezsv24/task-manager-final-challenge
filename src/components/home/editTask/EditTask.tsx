@@ -20,14 +20,17 @@ import { CalendarC } from "../../ui/calendar/Calendar";
 import { UseMediaQuery } from "../../../hooks/UseMediaQuery";
 import { RiCloseLargeLine } from "@remixicon/react";
 import useCardStore from "../../../store/useEditManager";
-import { useMutation } from "@apollo/client";
-import { EDIT_TASK } from "../../graphql/queries.graphql";
+import { gql, useMutation } from "@apollo/client";
+import { EDIT_TASK } from "../../../api/graphql/queries.graphql";
 import { useCustomToast } from "../../../hooks/UseCustomToast";
 import { LoadingComponent } from "../../ui/loading/Loading";
 import { columnName } from "../../../hooks/columnName";
 
 const formSchema = z.object({
-  taskName: z.string().min(3, "Add a validate task's name"),
+  taskName: z
+    .string()
+    .min(3, "Add a validate task's name")
+    .max(30, "the name is to long"),
   pointsTask: z.string().min(1, "this field is required"),
   assignee: z.string().min(1, "this field is required"),
   label: z.array(z.string()).min(1, "This field is required"),
@@ -121,10 +124,29 @@ export const EditTask = ({ onClose }: { onClose: () => void }) => {
 
         cache.modify({
           fields: {
-            tasks(existingTasks = [], { readField }) {
-              return existingTasks.map((taskRef: undefined) => {
+            tasks(existingTaskRefs = [], { readField }) {
+              return existingTaskRefs.map((taskRef: { __ref: string }) => {
                 const id = readField<string>("id", taskRef);
-                return id === data.updateTask.id ? data.updateTask : taskRef;
+
+                if (id === data.updateTask.id) {
+                  return cache.writeFragment({
+                    data: data.updateTask,
+                    fragment: gql`
+                      fragment UpdatedTask on Task {
+                        id
+                        name
+                        status
+                        dueDate
+                        assignee {
+                          id
+                          name
+                        }
+                        __typename
+                      }
+                    `,
+                  });
+                }
+                return taskRef;
               });
             },
           },
@@ -133,8 +155,6 @@ export const EditTask = ({ onClose }: { onClose: () => void }) => {
     });
 
   const onSubmit = async (data: FormData) => {
-    console.warn(data);
-
     try {
       await updateTask({
         variables: {
@@ -149,6 +169,7 @@ export const EditTask = ({ onClose }: { onClose: () => void }) => {
           },
         },
       });
+
       showToast("success", "Your task has been updated successfully");
       onClose();
       reset();
@@ -156,7 +177,7 @@ export const EditTask = ({ onClose }: { onClose: () => void }) => {
       console.error(error);
       return showToast(
         "error",
-        `Failed to create task. Please try again ${errorEdit?.message}.`,
+        `Failed to update task. Please try again ${errorEdit?.message}.`,
       );
     }
   };
