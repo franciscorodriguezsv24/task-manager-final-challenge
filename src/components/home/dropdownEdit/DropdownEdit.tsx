@@ -59,7 +59,6 @@ export const DropdownEdit = ({ task, taskElement }: DropdownEditProps) => {
             }}
           >
             <RiDeleteBinLine />
-
             <Text variant="subtitle">Delete</Text>
           </MenuItem>
         </MenuItems>

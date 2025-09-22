@@ -2,7 +2,7 @@ import styles from "./avatar.module.scss";
 
 interface AvatarProps {
   imgUrl: string;
-  alt: string;
+  alt?: string;
   className?: string;
 }
 

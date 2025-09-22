@@ -10,6 +10,7 @@ import useCardStore from "../../../store/useEditManager";
 import { useMemo } from "react";
 import { RiCloseCircleLine } from "@remixicon/react";
 import { columnName } from "../../../hooks/columnName";
+import { LoadingComponent } from "../../ui/loading/Loading";
 
 export const Tasks = () => {
   const { searchCardElement, filtersElement } = useCardStore();
@@ -51,14 +52,12 @@ export const Tasks = () => {
     variables: {
       input: queryInput,
     },
+    context: {
+      debounceKey: "1",
+    },
   });
 
-  if (isloadingCols || isloadingTasks)
-    return (
-      <div className={styles.spinnerContainer}>
-        <span className={styles.loader}></span>
-      </div>
-    );
+  if (isloadingCols || isloadingTasks) return <LoadingComponent />;
 
   if (errorCols || errorData) return <p>Unexpected Error</p>;
 

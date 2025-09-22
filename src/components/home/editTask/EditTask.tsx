@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   useGetLabelsQuery,
   useGetPointEstimatesQuery,
+  useGetStatusQuery,
   useGetUsersQuery,
 } from "../../../generated/graphql";
 import { pointEstimate } from "../../../hooks/PointEstimate";
@@ -22,6 +23,8 @@ import useCardStore from "../../../store/useEditManager";
 import { useMutation } from "@apollo/client";
 import { EDIT_TASK } from "../../graphql/queries.graphql";
 import { useCustomToast } from "../../../hooks/UseCustomToast";
+import { LoadingComponent } from "../../ui/loading/Loading";
+import { columnName } from "../../../hooks/columnName";
 
 const formSchema = z.object({
   taskName: z.string().min(3, "Add a validate task's name"),
@@ -29,6 +32,7 @@ const formSchema = z.object({
   assignee: z.string().min(1, "this field is required"),
   label: z.array(z.string()).min(1, "This field is required"),
   dueDate: z.date().min(1, "this field is required"),
+  status: z.string().min(1, "this field is required"),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -58,6 +62,7 @@ export const EditTask = ({ onClose }: { onClose: () => void }) => {
       assignee: selectedCard?.assigneeId?.id || "",
       label: selectedCard?.tags || [],
       dueDate: convertToDate(selectedCard?.dueDate),
+      status: selectedCard?.status || "",
     },
   });
 
@@ -79,12 +84,28 @@ export const EditTask = ({ onClose }: { onClose: () => void }) => {
     error: errorLabel,
   } = useGetLabelsQuery();
 
+  const {
+    data: dataStatus,
+    loading: isLoadingStatus,
+    error: errorStatus,
+  } = useGetStatusQuery();
+
+  const status = dataStatus?.__type?.enumValues?.map((item, index) => ({
+    id: String(index + 1),
+    name: columnName[item.name],
+    value: item.name,
+  }));
+
+  const order = Object.keys(pointEstimate);
+
   const points =
-    dataEstimate?.__type?.enumValues?.map((item, index) => ({
-      id: String(index + 1),
-      name: pointEstimate[item.name],
-      value: item.name,
-    })) || [];
+    dataEstimate?.__type?.enumValues
+      ?.map((item, index) => ({
+        id: String(index + 1),
+        name: pointEstimate[item.name],
+        value: item.name,
+      }))
+      .sort((a, b) => order.indexOf(a.value) - order.indexOf(b.value)) || [];
 
   const labels =
     dateLabels?.__type?.enumValues?.map((item, index) => ({
@@ -123,7 +144,7 @@ export const EditTask = ({ onClose }: { onClose: () => void }) => {
             id: selectedCard?.id,
             name: data.taskName,
             pointEstimate: data.pointsTask,
-            status: selectedCard?.status,
+            status: data.status,
             tags: data.label,
           },
         },
@@ -140,12 +161,18 @@ export const EditTask = ({ onClose }: { onClose: () => void }) => {
     }
   };
 
-  if (isLoadingEdit) return <p>Loading...</p>;
+  if (isLoadingEdit)
+    return (
+      <div className={styles.spinnerContainer}>
+        <LoadingComponent />
+      </div>
+    );
 
-  if (isLoadingUsers || isLoadingEstimate || isLoadingLabels)
+  if (isLoadingUsers || isLoadingEstimate || isLoadingLabels || isLoadingStatus)
     return <p>Loading...</p>;
 
-  if (errorUsers || errorEstimate || errorLabel) return <p>Error foundata</p>;
+  if (errorUsers || errorEstimate || errorLabel || errorStatus)
+    return <p>Error foundata</p>;
 
   return createPortal(
     <div className={styles.container}>
@@ -250,6 +277,27 @@ export const EditTask = ({ onClose }: { onClose: () => void }) => {
                 )}
               />
               <Controller
+                name="status"
+                control={control}
+                render={({ field, fieldState }) => (
+                  <div>
+                    <ListBox
+                      data={status || []}
+                      displayKey="name"
+                      valueKey="value"
+                      placeholder="Status"
+                      value={field.value}
+                      onChange={field.onChange}
+                    />
+                    {fieldState.error && (
+                      <span style={{ color: "red" }}>
+                        {fieldState.error.message}
+                      </span>
+                    )}
+                  </div>
+                )}
+              />
+              <Controller
                 name="dueDate"
                 control={control}
                 render={({ field, fieldState }) => (
@@ -282,7 +330,7 @@ export const EditTask = ({ onClose }: { onClose: () => void }) => {
             <Button
               variant={isMobile ? "defaul" : "secondary"}
               type="submit"
-              disabled={!isValid}
+              disabled={!isValid || isLoadingEdit}
               className={styles.buttonSend}
             >
               Edit

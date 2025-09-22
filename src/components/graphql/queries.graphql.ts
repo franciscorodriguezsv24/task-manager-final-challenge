@@ -20,6 +20,16 @@ export const GET_POINT_ESTIMATES = gql`
   }
 `;
 
+export const GET_STATUS = gql`
+  query GetStatus {
+    __type(name: "Status") {
+      enumValues {
+        name
+      }
+    }
+  }
+`;
+
 export const GET_LABELS_TAGS = gql`
   query GetLabels {
     __type(name: "TaskTag") {

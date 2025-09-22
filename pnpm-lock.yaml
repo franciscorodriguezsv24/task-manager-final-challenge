@@ -26,6 +26,9 @@ importers:
       '@remixicon/react':
         specifier: ^4.6.0
         version: 4.6.0(react@19.1.1)
+      apollo-link-debounce:
+        specifier: ^3.0.0
+        version: 3.0.0(@apollo/client@3.14.0(@types/react@19.1.12)(graphql-ws@6.0.6(graphql@16.11.0)(ws@8.18.3))(graphql@16.11.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -2875,6 +2878,11 @@ packages:
   ansi-styles@6.2.3:
     resolution: {integrity: sha512-4Dj6M28JB+oAH8kFkTLUo+a2jwOFkuqb3yucU0CANcRRUbxS0cP0nZYCGjcc3BNXwRIsUVmDGgzawme7zvJHvg==}
     engines: {node: '>=12'}
+
+  apollo-link-debounce@3.0.0:
+    resolution: {integrity: sha512-Ytig2Ml41T2bovBIoKkStPKoIh0r/kTK1dSM9Gpvo5W3BAPxt1WguAkeaPLJqeuvrNJIjQ/Pl38/14VVA0hdYg==}
+    peerDependencies:
+      '@apollo/client': ^3.0.0
 
   argparse@2.0.1:
     resolution: {integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==}
@@ -7934,6 +7942,10 @@ snapshots:
       color-convert: 2.0.1
 
   ansi-styles@6.2.3: {}
+
+  apollo-link-debounce@3.0.0(@apollo/client@3.14.0(@types/react@19.1.12)(graphql-ws@6.0.6(graphql@16.11.0)(ws@8.18.3))(graphql@16.11.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)):
+    dependencies:
+      '@apollo/client': 3.14.0(@types/react@19.1.12)(graphql-ws@6.0.6(graphql@16.11.0)(ws@8.18.3))(graphql@16.11.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
 
   argparse@2.0.1: {}
 
