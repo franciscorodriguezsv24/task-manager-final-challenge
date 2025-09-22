@@ -5,14 +5,15 @@ import {
   ListboxOptions,
 } from "@headlessui/react";
 import styles from "./listBox.module.scss";
+import { RiStairsFill } from "@remixicon/react";
 
 interface ListBoxProps<T> {
   data: T[];
   displayKey: keyof T;
   valueKey: keyof T;
   placeholder?: string;
-  value: string | null; // Solo string
-  onChange: (value: string | null) => void; // Solo string
+  value: string | null;
+  onChange: (value: string | null) => void;
 }
 
 export const ListBox = <T,>({
@@ -24,7 +25,7 @@ export const ListBox = <T,>({
   onChange,
 }: ListBoxProps<T>) => {
   const selectedItem =
-    data.find((item) => String(item[valueKey]) === value) || null;
+    data.find((item) => String(item[valueKey]) === value) ?? null;
 
   const handleChange = (item: T | null) => {
     if (item) {
@@ -37,7 +38,11 @@ export const ListBox = <T,>({
   return (
     <Listbox value={selectedItem} onChange={handleChange}>
       <ListboxButton className={styles.listButton}>
-        <div className={styles.iconContainer}>+-</div>
+        {placeholder === "Status" ? (
+          <RiStairsFill />
+        ) : (
+          <div className={styles.iconContainer}>+-</div>
+        )}
         {selectedItem ? String(selectedItem[displayKey]) : placeholder}
       </ListboxButton>
       <ListboxOptions anchor="bottom start" className={styles.optionsBox}>
@@ -45,9 +50,17 @@ export const ListBox = <T,>({
           <ListboxOption
             key={String(item[valueKey])}
             value={item}
-            className={styles.listBoxElements}
+            className={
+              placeholder === "Status"
+                ? styles.listBoxElementsStats
+                : styles.listBoxElements
+            }
           >
-            <div className={styles.iconContainer}>+-</div>
+            {placeholder === "Status" ? (
+              <RiStairsFill />
+            ) : (
+              <div className={styles.iconContainer}>+-</div>
+            )}
             {String(item[displayKey])}
           </ListboxOption>
         ))}

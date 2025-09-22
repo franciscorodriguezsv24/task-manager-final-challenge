@@ -7,6 +7,7 @@ import { useState } from "react";
 import {
   useGetLabelsQuery,
   useGetPointEstimatesQuery,
+  useGetStatusQuery,
   useGetUsersQuery,
 } from "../../../generated/graphql";
 import { pointEstimate } from "../../../hooks/PointEstimate";
@@ -18,6 +19,7 @@ import { ListBox } from "../../ui/listBox/ListBox";
 import useCardStore from "../../../store/useEditManager";
 import { useCustomToast } from "../../../hooks/UseCustomToast";
 import { Text } from "../../ui/text/Text";
+import { columnName } from "../../../hooks/columnName";
 
 export const Filters = () => {
   const [isShowModalFilter, setIsShowModalFilter] = useState<boolean>(false);
@@ -27,6 +29,7 @@ export const Filters = () => {
   const [selectedPointEstimate, setSelectedPointEstimate] =
     useState<string>("");
   const [selectedAssignee, setSelectedAssignee] = useState<string>("");
+  const [selectedStatus, setSelectedStatus] = useState<string>("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [selectedDueDate, setSelectedDueDate] = useState<Date | null>();
 
@@ -50,12 +53,22 @@ export const Filters = () => {
     error: errorLabel,
   } = useGetLabelsQuery();
 
+  const {
+    data: dataStatus,
+    loading: isLoadingStatus,
+    error: errorStatus,
+  } = useGetStatusQuery();
+
+  const order = Object.keys(pointEstimate);
+
   const points =
-    dataEstimate?.__type?.enumValues?.map((item, index) => ({
-      id: String(index + 1),
-      name: pointEstimate[item.name],
-      value: item.name,
-    })) || [];
+    dataEstimate?.__type?.enumValues
+      ?.map((item, index) => ({
+        id: String(index + 1),
+        name: pointEstimate[item.name],
+        value: item.name,
+      }))
+      .sort((a, b) => order.indexOf(a.value) - order.indexOf(b.value)) || [];
 
   const labels =
     dateLabels?.__type?.enumValues?.map((item, index) => ({
@@ -64,12 +77,18 @@ export const Filters = () => {
       value: item.name,
     })) || [];
 
+  const status = dataStatus?.__type?.enumValues?.map((item, index) => ({
+    id: String(index + 1),
+    name: columnName[item.name],
+    value: item.name,
+  }));
+
   const handleApplyFilters = () => {
     const filters = {
       dueDate: selectedDueDate || null,
       assigneeId: selectedAssignee,
       pointEstimate: selectedPointEstimate,
-      status: "",
+      status: selectedStatus,
       tags: selectedTags,
     };
 
@@ -81,19 +100,21 @@ export const Filters = () => {
   const handleClearFilters = () => {
     setSelectedPointEstimate("");
     setSelectedAssignee("");
+    setSelectedStatus("");
     setSelectedTags([]);
     setSelectedDueDate(null);
   };
 
-  if (isLoadingEstimate || isLoadingLabels || isLoadingUsers)
+  if (isLoadingEstimate || isLoadingLabels || isLoadingUsers || isLoadingStatus)
     return <p>loading</p>;
 
-  if (errorEstimate || errorLabel || errorUsers)
+  if (errorEstimate || errorLabel || errorUsers || errorStatus)
     return showToast("error", "failed to load elements");
 
   const handleCancel = () => {
     setIsShowModalFilter(false);
     if (filtersElement) {
+      setSelectedStatus(filtersElement.status);
       setSelectedPointEstimate(filtersElement.pointEstimate);
       setSelectedAssignee(filtersElement.assigneeId);
       setSelectedTags(filtersElement.tags);
@@ -153,6 +174,18 @@ export const Filters = () => {
                     placeholder="Label"
                     value={selectedTags}
                     onChange={(values: string[]) => setSelectedTags(values)}
+                  />
+                </div>
+                <div>
+                  <ListBox
+                    data={status || []}
+                    displayKey="name"
+                    valueKey="value"
+                    placeholder="Status"
+                    value={selectedStatus}
+                    onChange={(value: string | null) =>
+                      setSelectedStatus(value || "")
+                    }
                   />
                 </div>
                 <div>
