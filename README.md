@@ -90,3 +90,16 @@ I taked this pattern to create 2 elements especific, the modal component and car
 I use this pattern to make it simple the way to pass some atributes to child components of the tree.
 
 # images
+<img width="346" height="715" alt="Screenshot 2025-09-22 at 5 51 08 PM" src="https://github.com/user-attachments/assets/1afc59a2-b0f3-4710-9315-3cd3e6721064" />
+<img width="346" height="715" alt="Screenshot 2025-09-22 at 5 51 31 PM" src="https://github.com/user-attachments/assets/c4222d22-2b0c-4084-887b-7f85efa0ac73" />
+<img width="346" height="715" alt="Screenshot 2025-09-22 at 5 51 57 PM" src="https://github.com/user-attachments/assets/7b28b5f1-4695-4a11-86a6-cf01540d192b" />
+<img width="346" height="715" alt="Screenshot 2025-09-22 at 5 53 13 PM" src="https://github.com/user-attachments/assets/7847311e-dc6b-4754-aa75-8544805fb08c" />
+<img width="346" height="715" alt="Screenshot 2025-09-22 at 5 52 49 PM" src="https://github.com/user-attachments/assets/ad721544-b8f1-4003-ae53-0c8109f5f6a3" />
+<img width="364" height="718" alt="Screenshot 2025-09-22 at 5 56 31 PM" src="https://github.com/user-attachments/assets/eaa89b26-f6de-4e27-a547-f28ebdca4072" />
+
+# video
+https://github.com/user-attachments/assets/d7c5d44c-fe34-4f33-ae01-8af63b21acf6
+
+
+
+
