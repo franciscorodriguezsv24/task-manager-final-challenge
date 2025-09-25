@@ -3,7 +3,7 @@ import { Modal } from "../../ui/modal/Modal";
 import styles from "./filters.module.scss";
 import { Button } from "../../ui/button/Button";
 import { RiEqualizerLine } from "@remixicon/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   useGetLabelsQuery,
   useGetPointEstimatesQuery,
@@ -23,6 +23,7 @@ import { columnName } from "../../../hooks/columnName";
 
 export const Filters = () => {
   const [isShowModalFilter, setIsShowModalFilter] = useState<boolean>(false);
+  const [isLoadingContent, setIsLoadingContent] = useState<boolean>(false);
 
   const { showToast } = useCustomToast();
 
@@ -94,7 +95,6 @@ export const Filters = () => {
 
     filtersSelected(filters);
     setIsShowModalFilter(false);
-    console.warn("Filtros aplicados:", filters);
   };
 
   const handleClearFilters = () => {
@@ -105,8 +105,18 @@ export const Filters = () => {
     setSelectedDueDate(null);
   };
 
-  if (isLoadingEstimate || isLoadingLabels || isLoadingUsers || isLoadingStatus)
-    return <p>loading</p>;
+  useEffect(() => {
+    if (
+      isLoadingEstimate ||
+      isLoadingLabels ||
+      isLoadingUsers ||
+      isLoadingStatus
+    ) {
+      setIsLoadingContent(true);
+    } else {
+      setIsLoadingContent(false);
+    }
+  }, [isLoadingEstimate, isLoadingLabels, isLoadingUsers, isLoadingStatus]);
 
   if (errorEstimate || errorLabel || errorUsers || errorStatus)
     return showToast("error", "failed to load elements");
@@ -130,6 +140,7 @@ export const Filters = () => {
         variant="default"
         onClick={() => setIsShowModalFilter(true)}
         className={styles.filterButton}
+        disabled={isLoadingContent}
       >
         <RiEqualizerLine />
       </Button>

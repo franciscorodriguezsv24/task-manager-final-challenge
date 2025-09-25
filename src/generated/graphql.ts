@@ -346,6 +346,7 @@ export type GetTasksQuery = {
     dueDate: Date;
     pointEstimate: PointEstimate;
     tags: Array<TaskTag>;
+    position: number;
     assignee: { __typename: "User"; id: string; fullName: string } | null;
   }>;
 };
@@ -386,6 +387,7 @@ export type EditTaskMutation = {
     __typename: "Task";
     dueDate: Date;
     id: string;
+    position: number;
     name: string;
     pointEstimate: PointEstimate;
     status: Status;
@@ -394,6 +396,28 @@ export type EditTaskMutation = {
   };
 };
 
+export type UpdatedTaskFragment = {
+  __typename: "Task";
+  id: string;
+  name: string;
+  status: Status;
+  dueDate: Date;
+  assignee: { __typename: "User"; id: string; fullName: string } | null;
+};
+
+export const UpdatedTaskFragmentDoc = gql`
+  fragment UpdatedTask on Task {
+    id
+    name
+    status
+    dueDate
+    assignee {
+      id
+      fullName
+    }
+    __typename
+  }
+`;
 export const GetColumnsDocument = gql`
   query GetColumns {
     __type(name: "Status") {
@@ -865,6 +889,7 @@ export const GetTasksDocument = gql`
       dueDate
       pointEstimate
       tags
+      position
     }
   }
 `;
@@ -1049,6 +1074,7 @@ export const EditTaskDocument = gql`
       }
       dueDate
       id
+      position
       name
       pointEstimate
       status

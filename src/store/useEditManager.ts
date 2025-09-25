@@ -36,7 +36,6 @@ const useCardStore = create<CardStore>((set) => ({
 
   selectCard: (card) => {
     set({ selectedCard: card });
-    console.warn("Card seleccionada:", card);
   },
 
   cardId: null,

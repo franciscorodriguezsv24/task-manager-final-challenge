@@ -22,8 +22,6 @@ export const UserElement = () => {
 
   const user = data.profile;
 
-  console.warn(user);
-
   return (
     <div className={styles.containerProfile}>
       <div className={styles.backgroundContainer}></div>

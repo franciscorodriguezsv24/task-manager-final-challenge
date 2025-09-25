@@ -18,7 +18,7 @@ export const Home = () => {
             <RiGalleryView2 />
           </Button>
         </div>
-        <div className={styles.actionContainer}>
+        <div className={styles.actionContainer} data-testid="action-container">
           <Filters />
           <CreateTask />
         </div>
@@ -26,7 +26,7 @@ export const Home = () => {
       <div className={styles.tabSelectedContainer}>
         <TabSelect />
       </div>
-      <div className={styles.tasksArea}>
+      <div className={styles.tasksArea} data-testid="action-tasks">
         <Tasks />
       </div>
     </div>
