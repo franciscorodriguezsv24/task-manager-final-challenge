@@ -21,11 +21,7 @@ import {
   DragOverlay,
   rectIntersection,
 } from "@dnd-kit/core";
-import {
-  SortableContext,
-  verticalListSortingStrategy,
-  arrayMove,
-} from "@dnd-kit/sortable";
+import { arrayMove } from "@dnd-kit/sortable";
 import { useMutation } from "@apollo/client";
 import { EDIT_TASK } from "../../../api/graphql/queries.graphql";
 import { TaskColumn } from "../taskColumns/TaskColumns";
@@ -187,15 +183,15 @@ export const Tasks = () => {
     if (!overIdRaw) return;
 
     const activeId = activeIdRaw.replace("task:", "");
-    const overIsCol = overIdRaw.startsWith("col:");
-    const overId = overIsCol
+    const isOverIsCol = overIdRaw.startsWith("col:");
+    const overId = isOverIsCol
       ? overIdRaw.replace("col:", "")
       : overIdRaw.replace("task:", "");
 
     const currentTask = optimisticTasks.find((task) => task.id === activeId);
     if (!currentTask) return;
 
-    if (overIsCol) {
+    if (isOverIsCol) {
       if (currentTask.status !== overId) {
         applyLocalStatusChange(activeId, overId as Task["status"]);
       }
@@ -238,15 +234,15 @@ export const Tasks = () => {
     const activeIdRaw = active.id as string;
     const overIdRaw = over.id as string;
     const activeTaskId = activeIdRaw.replace("task:", "");
-    const overIsCol = overIdRaw.startsWith("col:");
-    const overId = overIsCol
+    const isOverIsCol = overIdRaw.startsWith("col:");
+    const overId = isOverIsCol
       ? overIdRaw.replace("col:", "")
       : overIdRaw.replace("task:", "");
 
     if (pendingUpdatesRef.current.has(activeTaskId)) return;
 
     let newStatus: Task["status"] | null = null;
-    if (overIsCol) {
+    if (isOverIsCol) {
       newStatus = overId as Task["status"];
     } else {
       const overTask = ((tasksData?.tasks as Task[]) || []).find(
@@ -264,6 +260,14 @@ export const Tasks = () => {
     if (currentTaskOnServer.status === newStatus) return;
 
     const currentData = active.data.current?.task;
+
+    const tasksInColumn = optimisticTasks.filter(
+      (task) => task.status === newStatus,
+    );
+
+    const newPosition = tasksInColumn.findIndex(
+      (task) => task.id === activeTaskId,
+    );
 
     beginUpdateSnapshot();
     addPending(activeTaskId);
@@ -283,6 +287,7 @@ export const Tasks = () => {
           dueDate: currentData.dueDate ?? null,
           pointEstimate: currentData.pointEstimate ?? null,
           tags: currentData.tags ?? [],
+          position: newPosition,
         },
       },
 
@@ -323,24 +328,23 @@ export const Tasks = () => {
         collisionDetection={rectIntersection}
       >
         {orderedColumns.map((col) => (
-          <SortableContext
+          <TaskColumn
             key={col.name}
-            items={tasksByStatus[col.name]?.map((task) => task.id) || []}
-            strategy={verticalListSortingStrategy}
-          >
-            <TaskColumn
-              colName={col.name}
-              tasks={tasksByStatus[col.name] || []}
-            />
-          </SortableContext>
+            colName={col.name}
+            tasks={tasksByStatus[col.name] || []}
+          />
         ))}
 
         <DragOverlay>
           {activeTask ? (
             <div
               style={{
-                opacity: 0.9,
+                opacity: 0.5,
                 cursor: "grabbing",
+                filter: "drop-shadow(0 10px 20px rgba(0, 0, 0, 0.15))",
+                zIndex: 9999,
+                pointerEvents: "none",
+                scale: "1.0",
               }}
             >
               <Cards task={activeTask} />
