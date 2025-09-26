@@ -23,7 +23,7 @@
 }
 
 .listButtonAvatar:hover{
-    background-color: $secondary-gray;
+    background-color: var(--primary-color);
 
 }
 
@@ -41,7 +41,7 @@
     padding: 10px;
     margin-top:10px;
     z-index: 1001;
-    background-color: $secondary-gray;
+    background-color: var(--primary-color);
     font-family: 'Roboto', sans-serif;
     border: 1px solid $primary-gray;
     border-radius: 8px;

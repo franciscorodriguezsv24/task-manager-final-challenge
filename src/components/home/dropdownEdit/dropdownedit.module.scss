@@ -15,7 +15,7 @@
     font-size: 0.875rem;
     line-height: 1.5;
     font-weight: 600;
-    color: white;
+    color: var(--primary-text);
     border: none;
 
     &[data-hover] {
@@ -29,11 +29,11 @@
     transform-origin: top right;
     border-radius: 0.75rem;
     border: 1px solid $primary-gray;
-    background-color:#393D41;
+    background-color:var(--secondary-color);
     padding: 0.25rem;
     font-size: 0.875rem;
     line-height: 1.5rem;
-    color: white;
+    color: var(--primary-text);
     --anchor-gap: 0.25rem;
 }
 
@@ -44,8 +44,8 @@
     gap: 0.5rem;
     border-radius: 0.5rem;
     padding: 0.75rem 1rem;
-    background-color:#393D41;
-    color: white;
+    background-color:var(--secondary-color);
+    color: var(--primary-text);
     border: none;
 
     &[data-focus] {

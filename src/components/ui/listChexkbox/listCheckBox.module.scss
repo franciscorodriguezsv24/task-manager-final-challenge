@@ -23,7 +23,7 @@
 }
 
 .listButton:hover{
-    background-color: $secondary-gray;
+    background-color: var(--secondary-color);
 }
 
 .listBoxElements{
@@ -41,7 +41,7 @@
     padding: 10px 0px 10px 0px;
     margin-top:10px;
     z-index: 1001;
-    background-color: $secondary-gray;
+    background-color: var(--primary-color);
     font-family: 'Roboto', sans-serif;
     border: 1px solid $primary-gray;
     border-radius: 8px;
@@ -73,7 +73,7 @@
   height: 18px;
   border: 2px solid #d1d5db;
   border-radius: 4px;
-  background-color: $secondary-gray;
+  background-color: var(--primary-color);
   
   cursor: pointer;
   transition: all 0.2s ease;
@@ -89,7 +89,7 @@
   }
   
   &:checked {
-    background-color: $secondary-gray;
+    background-color: var(--primary-color);
     border: 2px solid $primary-gray;
     
     &::after {
