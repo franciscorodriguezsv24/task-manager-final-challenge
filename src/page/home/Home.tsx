@@ -5,6 +5,7 @@ import { Tasks } from "../../components/home/tasks/Tasks";
 import { CreateTask } from "../../components/home/createTask/CreateTask";
 import { Filters } from "../../components/home/filters/Filters";
 import { TabSelect } from "../../components/ui/TabSelect/TabSelect";
+import { FilterBadge } from "../../components/home/filters/filterBadge/FilterBadge";
 
 export const Home = () => {
   return (
@@ -19,6 +20,7 @@ export const Home = () => {
           </Button>
         </div>
         <div className={styles.actionContainer} data-testid="action-container">
+          <FilterBadge />
           <Filters />
           <CreateTask />
         </div>

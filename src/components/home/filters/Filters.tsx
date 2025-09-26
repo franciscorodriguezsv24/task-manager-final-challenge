@@ -27,14 +27,33 @@ export const Filters = () => {
 
   const { showToast } = useCustomToast();
 
-  const [selectedPointEstimate, setSelectedPointEstimate] =
-    useState<string>("");
-  const [selectedAssignee, setSelectedAssignee] = useState<string>("");
-  const [selectedStatus, setSelectedStatus] = useState<string>("");
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [selectedDueDate, setSelectedDueDate] = useState<Date | null>();
-
   const { filtersSelected, filtersElement } = useCardStore();
+
+  const [selectedPointEstimate, setSelectedPointEstimate] = useState<string>(
+    filtersElement?.pointEstimate || "",
+  );
+  const [selectedAssignee, setSelectedAssignee] = useState<string>(
+    filtersElement?.assigneeId || "",
+  );
+  const [selectedStatus, setSelectedStatus] = useState<string>(
+    filtersElement?.status || "",
+  );
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedDueDate, setSelectedDueDate] = useState<Date | null>(
+    filtersElement?.dueDate || null,
+  );
+
+  useEffect(() => {
+    if (isShowModalFilter && filtersElement) {
+      setSelectedStatus(filtersElement.status);
+      setSelectedPointEstimate(filtersElement.pointEstimate);
+      setSelectedAssignee(filtersElement.assigneeId);
+      setSelectedTags(filtersElement.tags);
+      setSelectedDueDate(
+        filtersElement.dueDate ? new Date(filtersElement.dueDate) : null,
+      );
+    }
+  }, [isShowModalFilter, filtersElement]);
 
   const {
     loading: isLoadingUsers,
