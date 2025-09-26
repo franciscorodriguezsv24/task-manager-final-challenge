@@ -14,6 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@apollo/client";
 import { CREATE_TASK } from "../../../api/graphql/queries.graphql";
 import {
+  Status,
   useGetLabelsQuery,
   useGetPointEstimatesQuery,
   useGetUsersQuery,
@@ -85,7 +86,7 @@ export const CreateTask = () => {
         cache.modify({
           fields: {
             tasks(existingTasks = []) {
-              return [...existingTasks, data.createTask];
+              return [{ ...data.createTask, isNew: true }, ...existingTasks];
             },
           },
         });
@@ -112,7 +113,7 @@ export const CreateTask = () => {
             dueDate: data.dueDate,
             name: data.taskName,
             pointEstimate: data.pointsTask,
-            status: "BACKLOG",
+            status: Status.Backlog,
             tags: data.label,
           },
         },

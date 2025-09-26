@@ -13,11 +13,12 @@ import {
 import { useQuery } from "@apollo/client";
 import { GET_PROFILE } from "../../../api/graphql/queries.graphql";
 import { formatDate } from "../../../hooks/FormatedDate";
+import { LoadingComponent } from "../../ui/loading/Loading";
 
 export const UserElement = () => {
   const { data, loading: isLoadingProfile, error } = useQuery(GET_PROFILE);
 
-  if (isLoadingProfile) return <p>Cargando...</p>;
+  if (isLoadingProfile) return <LoadingComponent />;
   if (error) return <p>Error: {error.message}</p>;
 
   const user = data.profile;
