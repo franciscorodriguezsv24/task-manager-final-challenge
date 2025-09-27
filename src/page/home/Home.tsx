@@ -6,16 +6,28 @@ import { CreateTask } from "../../components/home/createTask/CreateTask";
 import { Filters } from "../../components/home/filters/Filters";
 import { TabSelect } from "../../components/ui/TabSelect/TabSelect";
 import { FilterBadge } from "../../components/home/filters/filterBadge/FilterBadge";
+import { useState } from "react";
+import { TaskList } from "../../components/home/taskList/TaskList";
 
 export const Home = () => {
+  const [viewType, setViewType] = useState<string>("dashboard");
+
   return (
     <div className={styles.dashboardContainer}>
       <div className={styles.buttonContainer}>
         <div className={styles.layoutButtonContainer}>
-          <Button variant="default" className={styles.buttons}>
+          <Button
+            variant={viewType == "dashboard" ? "default" : "primary"}
+            className={styles.buttons}
+            onClick={() => setViewType("list")}
+          >
             <RiMenuLine />
           </Button>
-          <Button variant="primary" className={styles.buttons}>
+          <Button
+            variant={viewType == "dashboard" ? "primary" : "default"}
+            className={styles.buttons}
+            onClick={() => setViewType("dashboard")}
+          >
             <RiGalleryView2 />
           </Button>
         </div>
@@ -26,10 +38,12 @@ export const Home = () => {
         </div>
       </div>
       <div className={styles.tabSelectedContainer}>
-        <TabSelect />
+        <FilterBadge />
+        <TabSelect setViewType={setViewType} />
       </div>
+
       <div className={styles.tasksArea} data-testid="action-tasks">
-        <Tasks />
+        {viewType === "dashboard" ? <Tasks /> : <TaskList />}
       </div>
     </div>
   );
