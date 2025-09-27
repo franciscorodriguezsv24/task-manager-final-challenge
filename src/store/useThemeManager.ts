@@ -7,7 +7,6 @@ interface ThemeState {
   toggleTheme: () => void;
 }
 
-// Función para obtener el tema inicial desde localStorage
 const getInitialTheme = (): Theme => {
   if (typeof window !== "undefined") {
     const storedTheme = localStorage.getItem("theme") as Theme | null;
@@ -15,12 +14,11 @@ const getInitialTheme = (): Theme => {
       return storedTheme;
     }
   }
-  return "dark"; // valor por defecto
+  return "dark";
 };
 
 export const useThemeStore = create<ThemeState>((set) => {
   const initialTheme = getInitialTheme();
-  // Actualiza el atributo al cargar
   if (typeof window !== "undefined") {
     document.documentElement.setAttribute("data-theme", initialTheme);
   }
@@ -32,7 +30,7 @@ export const useThemeStore = create<ThemeState>((set) => {
         const newTheme = state.theme === "light" ? "dark" : "light";
         if (typeof window !== "undefined") {
           document.documentElement.setAttribute("data-theme", newTheme);
-          localStorage.setItem("theme", newTheme); // guardar en localStorage
+          localStorage.setItem("theme", newTheme);
         }
         return { theme: newTheme };
       }),

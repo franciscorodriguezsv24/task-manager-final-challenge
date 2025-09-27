@@ -15,7 +15,7 @@ interface ListBoxProps<T> {
   valueKey: keyof T;
   placeholder?: string;
   image?: string;
-  value: string | null; // Solo string para el nombre
+  value: string | null;
   onChange: (value: string | null) => void;
 }
 
