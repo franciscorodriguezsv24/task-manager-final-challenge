@@ -1,8 +1,36 @@
+@use "../../../../styles/global" as *;
+
 .containerButtons{
+    width: 80%;
     display: flex;
+    flex-flow: row wrap;
     gap: 0.5rem;
+
+    @media (min-width:880px) {
+        display: flex;
+        gap: 0.5rem;
+    }
+
 }
 
 .button{
     display: none;
+}
+
+.filter{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--primary-color);
+    border: 1px solid $primary-gray;
+    border-radius: 8px;
+    color: var(--primary-text);
+    padding: 0px 5px;
+    padding-left: 10px;
+
+    &:hover{
+        background-color: var(--secondary-color);
+        cursor: pointer;
+    }
 }

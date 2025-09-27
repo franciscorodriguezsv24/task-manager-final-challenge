@@ -16,6 +16,8 @@ import { tagToValue } from "../../../hooks/TagValue";
 import { formatDate } from "../../../hooks/FormatedDate";
 import { UseMediaQuery } from "../../../hooks/UseMediaQuery";
 import { useDraggable } from "@dnd-kit/core";
+import { Button, TooltipTrigger } from "react-aria-components";
+import { Tooltip } from "../../ui/tooltip/Tooltip";
 
 function numberName(point: string): string | null {
   return pointEstimate[point] ?? null;
@@ -141,7 +143,14 @@ export const Cards = ({ task }: { task: Task }) => {
         </div>
       </Card.Body>
       <Card.Footer className={styles.footerCard}>
-        <Avatar imgUrl="https://picsum.photos/200/300" alt="testing2" />
+        <div className={styles.avatarContainer}>
+          <TooltipTrigger>
+            <Button className={styles.contianerButtonAvatar}>
+              <Avatar imgUrl="https://picsum.photos/200/300" alt="testing2" />
+            </Button>
+            <Tooltip>{task.assignee?.fullName}</Tooltip>
+          </TooltipTrigger>
+        </div>
         <div className={styles.detailsContainer}>
           <RiAttachment2 size={16} />
           <div className={styles.iconText}>
