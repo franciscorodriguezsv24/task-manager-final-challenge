@@ -1,0 +1,15 @@
+@use'../../../styles/global' as *;
+
+.tasksContainer{
+    width: 100%;
+    height: 72%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 2rem;
+
+  @media (min-width:880px) {
+        height: 82%;
+    justify-content: start;
+  }
+}

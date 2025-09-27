@@ -1,0 +1,67 @@
+@use '../../../styles/global' as *;
+
+.badge{
+    max-width: 9.6rem;
+    height: 32px;
+    border-radius: 4px;
+    border: none;
+    padding: 0px 10px 0px 10px;
+        display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap:0.5rem;
+}
+
+.default{
+    background: $secondary-white;
+    color: var(--primary-text);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap:0.5rem;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.primary{
+    background: $secondary-green;
+    color: $primary-green;
+    text-transform: uppercase;
+}
+
+.secondary{
+    background: $secondary-yellow;
+    color: $primary-yellow;
+    text-transform: uppercase;
+}
+
+.warning{
+    background: $secondary-red; 
+    color: $primary-red;
+    text-transform: uppercase;
+}
+
+.react{
+    background: #11abd144;
+    color: #11abd1;
+}
+
+.android{
+    background: #a3490d3f;
+    color: #a3490d;
+}
+
+.node_js{
+    background: #0da32435;
+    color: #0da324;
+}
+
+.rails{
+    background: #d113133d;
+    color: #d11313;
+}
+
+.ios{
+    background: #4c32a843;
+    color: #4c32a8;
+}

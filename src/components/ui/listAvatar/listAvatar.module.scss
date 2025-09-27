@@ -1,0 +1,78 @@
+@use '../../../styles/global' as *;
+
+
+
+.listButtonAvatar{
+    width: 100%;
+    height: 2rem;
+    color: var(--primary-text);
+    background-color: var(--secondary-color);
+    font-family: 'Roboto', sans-serif;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 0.75rem;
+    border-radius: 4px;
+    padding: 0px 10px 0px 10px;
+    @media (min-width: 880px) {
+        width: 8rem;
+        justify-content: center;
+        padding: 0px;
+    }
+}
+
+.listButtonAvatar:hover{
+    background-color: var(--primary-color);
+
+}
+
+.listBoxElementsAvatar{
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 1rem;
+    color: var(--primary-text);
+    width: 15rem;
+    cursor: pointer;
+}
+
+.optionsBoxAvatar{
+    padding: 10px;
+    margin-top:10px;
+    z-index: 1001;
+    background-color: var(--primary-color);
+    font-family: 'Roboto', sans-serif;
+    border: 1px solid $primary-gray;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    
+
+}
+
+.iconContainerAvatar{
+    width: 1.25rem;
+    height: 1.125rem;
+    background-color: var(--primary-text);
+    color: var(--secondary-color) ;
+    font-size: 15px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+.minusAvatar{
+    max-width: 30px;
+    max-height: 30px;
+}
+
+.textStyle{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 65%;
+}
