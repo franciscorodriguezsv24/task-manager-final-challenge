@@ -86,7 +86,7 @@ export const CreateTask = () => {
         cache.modify({
           fields: {
             tasks(existingTasks = []) {
-              return [{ ...data.createTask, isNew: true }, ...existingTasks];
+              return [data.createTask, ...existingTasks];
             },
           },
         });

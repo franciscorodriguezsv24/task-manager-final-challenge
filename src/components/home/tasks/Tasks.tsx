@@ -107,6 +107,18 @@ export const Tasks = () => {
     [finalTasksToDisplay],
   );
 
+  const sortedTasksByStatus = useMemo(
+    () =>
+      Object.entries(finalTasksByStatus).reduce(
+        (acc, [status, tasks]) => {
+          acc[status] = [...tasks].sort((a, b) => b.position - a.position);
+          return acc;
+        },
+        {} as Record<string, Task[]>,
+      ),
+    [finalTasksByStatus],
+  );
+
   const orderedColumns = Object.keys(columnName).map((key) => ({
     name: key,
   }));
@@ -131,7 +143,7 @@ export const Tasks = () => {
           <TaskColumn
             key={col.name}
             colName={col.name}
-            tasks={finalTasksByStatus[col.name] || []}
+            tasks={sortedTasksByStatus[col.name] || []}
           />
         ))}
 
