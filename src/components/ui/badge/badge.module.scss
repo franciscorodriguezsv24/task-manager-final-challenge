@@ -14,7 +14,7 @@
 
 .default{
     background: $secondary-white;
-    color: $primary-white;
+    color: var(--primary-text);
     display: flex;
     flex-direction: row;
     align-items: center;

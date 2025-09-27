@@ -14,9 +14,10 @@ import type { GetTasksQuery } from "../../../generated/graphql";
 import { pointEstimate } from "../../../hooks/PointEstimate";
 import { tagToValue } from "../../../hooks/TagValue";
 import { formatDate } from "../../../hooks/FormatedDate";
-import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
 import { UseMediaQuery } from "../../../hooks/UseMediaQuery";
+import { useDraggable } from "@dnd-kit/core";
+import { Button, TooltipTrigger } from "react-aria-components";
+import { Tooltip } from "../../ui/tooltip/Tooltip";
 
 function numberName(point: string): string | null {
   return pointEstimate[point] ?? null;
@@ -35,14 +36,7 @@ const random0To100 = Math.floor(Math.random() * 100) + 1;
 export const Cards = ({ task }: { task: Task }) => {
   const isMobile = UseMediaQuery("(max-width: 880px)");
 
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: task.id,
     disabled: isMobile,
     data: {
@@ -103,8 +97,6 @@ export const Cards = ({ task }: { task: Task }) => {
   };
 
   const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
     opacity: isDragging ? 0.3 : 1,
     cursor: isDragging ? "grabbing" : "grab",
     zIndex: isDragging ? 1000 : "auto",
@@ -151,7 +143,14 @@ export const Cards = ({ task }: { task: Task }) => {
         </div>
       </Card.Body>
       <Card.Footer className={styles.footerCard}>
-        <Avatar imgUrl="https://picsum.photos/200/300" alt="testing2" />
+        <div className={styles.avatarContainer}>
+          <TooltipTrigger>
+            <Button className={styles.contianerButtonAvatar}>
+              <Avatar imgUrl="https://picsum.photos/200/300" alt="testing2" />
+            </Button>
+            <Tooltip>{task.assignee?.fullName}</Tooltip>
+          </TooltipTrigger>
+        </div>
         <div className={styles.detailsContainer}>
           <RiAttachment2 size={16} />
           <div className={styles.iconText}>

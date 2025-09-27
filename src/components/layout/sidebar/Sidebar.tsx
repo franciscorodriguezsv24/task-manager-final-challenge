@@ -1,15 +1,22 @@
 import styles from "./sidebar.module.scss";
 import Logo from "../../../assets/Logo.svg";
+import DarkLogo from "../../../assets/Logo-black.svg";
 import { Link, useLocation } from "react-router";
 import { RiGalleryView2, RiMenuLine } from "@remixicon/react";
 import { CreateTask } from "../../home/createTask/CreateTask";
+import { useThemeStore } from "../../../store/useThemeManager";
 
 export const Sidebar = () => {
   const location = useLocation();
+  const { theme } = useThemeStore();
 
   return (
     <div className={styles.sidebarContainerElement}>
-      <img src={Logo} alt="logo-ravn" className={styles.logoImg} />
+      <img
+        src={theme == "light" ? DarkLogo : Logo}
+        alt="logo-ravn"
+        className={styles.logoImg}
+      />
       <div className={styles.linkContainer}>
         <Link
           to="/"

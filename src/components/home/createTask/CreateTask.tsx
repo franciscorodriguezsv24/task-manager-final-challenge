@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal } from "../../ui/modal/Modal";
 import { RiAddCircleFill, RiAddFill, RiCloseLargeLine } from "@remixicon/react";
 import { Button } from "../../ui/button/Button";
@@ -14,6 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@apollo/client";
 import { CREATE_TASK } from "../../../api/graphql/queries.graphql";
 import {
+  Status,
   useGetLabelsQuery,
   useGetPointEstimatesQuery,
   useGetUsersQuery,
@@ -41,6 +42,7 @@ export const CreateTask = () => {
   const { showToast } = useCustomToast();
 
   const [isShowModal, setIsShowModal] = useState<boolean>(false);
+  const [isLoadingContent, setIsLoadingContent] = useState<boolean>(false);
 
   const {
     loading: isLoadingUsers,
@@ -84,7 +86,7 @@ export const CreateTask = () => {
         cache.modify({
           fields: {
             tasks(existingTasks = []) {
-              return [...existingTasks, data.createTask];
+              return [data.createTask, ...existingTasks];
             },
           },
         });
@@ -92,8 +94,13 @@ export const CreateTask = () => {
     },
   );
 
-  if (isLoadingUsers || isLoadingEstimate || isLoadingLabels)
-    return <p>Loading...</p>;
+  useEffect(() => {
+    if (isLoadingEstimate || isLoadingLabels || isLoadingUsers) {
+      setIsLoadingContent(true);
+    } else {
+      setIsLoadingContent(false);
+    }
+  }, [isLoadingEstimate, isLoadingLabels, isLoadingUsers]);
 
   if (errorUsers || errorEstimate || errorLabel) return <p>Error foundata</p>;
 
@@ -106,7 +113,7 @@ export const CreateTask = () => {
             dueDate: data.dueDate,
             name: data.taskName,
             pointEstimate: data.pointsTask,
-            status: "BACKLOG",
+            status: Status.Backlog,
             tags: data.label,
           },
         },
@@ -147,6 +154,7 @@ export const CreateTask = () => {
         variant={isMobile ? "default" : "secondary"}
         className={styles.buttons}
         onClick={() => setIsShowModal(true)}
+        disabled={isLoadingContent}
       >
         {isMobile ? (
           <div className={styles.containerNewTask}>

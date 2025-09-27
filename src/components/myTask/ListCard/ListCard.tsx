@@ -6,6 +6,8 @@ import styles from "./listCard.module.scss";
 import { formatDate } from "../../../hooks/FormatedDate";
 import { Avatar } from "../../ui/avatar/Avatar";
 import { pointEstimate } from "../../../hooks/PointEstimate";
+import { Button, TooltipTrigger } from "react-aria-components";
+import { Tooltip } from "../../ui/tooltip/Tooltip";
 
 type Tasks = GetTasksQuery["tasks"];
 type Task = Tasks[0];
@@ -32,9 +34,18 @@ export const ListCard = ({ task }: { task: Task }) => {
             </Badge>
 
             {task.tags.length > 1 && (
-              <Badge variant="default" key="extra-tags">
-                +{task.tags.length - 1}
-              </Badge>
+              <TooltipTrigger delay={0}>
+                <Button className={styles.buttonContianerBadge}>
+                  +{task.tags.length - 1}
+                </Button>
+                <Tooltip>
+                  <div className={styles.containerTool}>
+                    {task.tags.slice(1).map((tag, index) => (
+                      <span key={index}>{tagToValue[tag]}</span>
+                    ))}
+                  </div>
+                </Tooltip>
+              </TooltipTrigger>
             )}
           </>
         )}

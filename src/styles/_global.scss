@@ -23,8 +23,8 @@ $text: 15px;
 
 }
 
-[data-theme="dark"] {
-    --primary-background: #f5f6fc;
-    --primary-card: #ffffff;
+[data-theme="light"] {
+    --primary-color: #f5f6fc;
+    --secondary-color: #ffffff;
     --primary-text: #000000;
 }

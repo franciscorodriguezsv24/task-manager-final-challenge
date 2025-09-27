@@ -139,7 +139,7 @@ export const EditTask = ({ onClose }: { onClose: () => void }) => {
                         dueDate
                         assignee {
                           id
-                          name
+                          fullName
                         }
                         __typename
                       }

@@ -49,8 +49,12 @@
 }
 
 .tabSelectedContainer{
-    display: block;
+    display: flex;
     width: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
 
     @media (min-width:880px) {
         display: none;

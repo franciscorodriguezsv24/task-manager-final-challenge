@@ -3,7 +3,7 @@ import { Modal } from "../../ui/modal/Modal";
 import styles from "./filters.module.scss";
 import { Button } from "../../ui/button/Button";
 import { RiEqualizerLine } from "@remixicon/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   useGetLabelsQuery,
   useGetPointEstimatesQuery,
@@ -23,17 +23,37 @@ import { columnName } from "../../../hooks/columnName";
 
 export const Filters = () => {
   const [isShowModalFilter, setIsShowModalFilter] = useState<boolean>(false);
+  const [isLoadingContent, setIsLoadingContent] = useState<boolean>(false);
 
   const { showToast } = useCustomToast();
 
-  const [selectedPointEstimate, setSelectedPointEstimate] =
-    useState<string>("");
-  const [selectedAssignee, setSelectedAssignee] = useState<string>("");
-  const [selectedStatus, setSelectedStatus] = useState<string>("");
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [selectedDueDate, setSelectedDueDate] = useState<Date | null>();
-
   const { filtersSelected, filtersElement } = useCardStore();
+
+  const [selectedPointEstimate, setSelectedPointEstimate] = useState<string>(
+    filtersElement?.pointEstimate || "",
+  );
+  const [selectedAssignee, setSelectedAssignee] = useState<string>(
+    filtersElement?.assigneeId || "",
+  );
+  const [selectedStatus, setSelectedStatus] = useState<string>(
+    filtersElement?.status || "",
+  );
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedDueDate, setSelectedDueDate] = useState<Date | null>(
+    filtersElement?.dueDate || null,
+  );
+
+  useEffect(() => {
+    if (isShowModalFilter && filtersElement) {
+      setSelectedStatus(filtersElement.status);
+      setSelectedPointEstimate(filtersElement.pointEstimate);
+      setSelectedAssignee(filtersElement.assigneeId);
+      setSelectedTags(filtersElement.tags);
+      setSelectedDueDate(
+        filtersElement.dueDate ? new Date(filtersElement.dueDate) : null,
+      );
+    }
+  }, [isShowModalFilter, filtersElement]);
 
   const {
     loading: isLoadingUsers,
@@ -94,7 +114,6 @@ export const Filters = () => {
 
     filtersSelected(filters);
     setIsShowModalFilter(false);
-    console.warn("Filtros aplicados:", filters);
   };
 
   const handleClearFilters = () => {
@@ -105,8 +124,18 @@ export const Filters = () => {
     setSelectedDueDate(null);
   };
 
-  if (isLoadingEstimate || isLoadingLabels || isLoadingUsers || isLoadingStatus)
-    return <p>loading</p>;
+  useEffect(() => {
+    if (
+      isLoadingEstimate ||
+      isLoadingLabels ||
+      isLoadingUsers ||
+      isLoadingStatus
+    ) {
+      setIsLoadingContent(true);
+    } else {
+      setIsLoadingContent(false);
+    }
+  }, [isLoadingEstimate, isLoadingLabels, isLoadingUsers, isLoadingStatus]);
 
   if (errorEstimate || errorLabel || errorUsers || errorStatus)
     return showToast("error", "failed to load elements");
@@ -130,6 +159,7 @@ export const Filters = () => {
         variant="default"
         onClick={() => setIsShowModalFilter(true)}
         className={styles.filterButton}
+        disabled={isLoadingContent}
       >
         <RiEqualizerLine />
       </Button>

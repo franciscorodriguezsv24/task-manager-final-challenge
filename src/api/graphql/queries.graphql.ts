@@ -79,6 +79,7 @@ export const TASKS = gql`
       dueDate
       pointEstimate
       tags
+      position
     }
   }
 `;
@@ -116,6 +117,7 @@ export const EDIT_TASK = gql`
       }
       dueDate
       id
+      position
       name
       pointEstimate
       status
